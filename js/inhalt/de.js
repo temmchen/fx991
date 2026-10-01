@@ -62,7 +62,10 @@ export default {
     zuruecksetzenFrage: 'Graph leeren und Analysis, Gleichungen und Solver-Werte zurücksetzen? Der Rechner bleibt, wie er ist.',
     zuruecksetzenOk: 'Zurücksetzen',
     zurueckgesetzt: 'Werkzeuge zurückgesetzt',
-    neueVersion: 'Neue Version geladen – wird beim nächsten Öffnen aktiv',
+    neueVersion: 'Neue Version geladen – sie erscheint beim nächsten Neuladen',
+    themaTitel: 'Erscheinungsbild',
+    thema_light: 'hell',
+    thema_dark: 'dunkel',
   },
 
   lektionen: [

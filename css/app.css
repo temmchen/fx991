@@ -20,32 +20,48 @@
   --koerper: #1c1c1f;
   --lcd: #c5ccb3;
   --lcd-text: #1a1e15;
-  --casio-grund: #141518;
+  /* Rechner-Reiter, hell: Fläche um das (immer dunkle) Gehäuse, Leiste */
+  --casio-grund: #E6E5E1;
+  --beamer-grund: #FFFFFF;
+  --leiste-bg: #F7F6F3;
+  --leiste-text: #1B1B1A;
+  --leiste-rand: #DAD8D2;
+  --leiste-knopf-rand: #CFCCC4;
+  --leiste-gedaempft: #74726C;
 }
 :root[data-theme="dark"] {
   --akzent-hell: #3a1d24;
   --gruen-hell: #173323;
+  --casio-grund: #141518;
+  --beamer-grund: #0b0c0e;
+  --leiste-bg: #1a1b1f;
+  --leiste-text: #e6e6e8;
+  --leiste-rand: #2b2d33;
+  --leiste-knopf-rand: #3a3c43;
+  --leiste-gedaempft: #9a9ca4;
 }
 
 /* MARK: Rechner-Reiter */
 
-#pane-calc { background: var(--casio-grund); color: #ececec; container-type: inline-size; container-name: rechner; }
+#pane-calc { background: var(--casio-grund); color: var(--leiste-text); container-type: inline-size; container-name: rechner; }
 .leiste {
   flex: none; display: flex; align-items: center; gap: 8px; flex-wrap: nowrap;
   padding: calc(var(--safe-top) + 6px) 12px 6px;
-  background: #1a1b1f; border-bottom: 1px solid #2b2d33; color: #e6e6e8; z-index: 5;
+  background: var(--leiste-bg); border-bottom: 1px solid var(--leiste-rand); color: var(--leiste-text); z-index: 5;
 }
 .leiste .marke { font-weight: 700; letter-spacing: .01em; margin-right: auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.leiste .marke small { font-weight: 500; color: #9a9ca4; margin-left: 6px; }
+.leiste .marke small { font-weight: 500; color: var(--leiste-gedaempft); margin-left: 6px; }
 .leiste button {
-  min-height: 34px; padding: 4px 11px; border-radius: 9px; border: 1px solid #3a3c43;
-  background: transparent; color: #e6e6e8; cursor: pointer; white-space: nowrap; font-size: 15px;
+  min-height: 34px; padding: 4px 11px; border-radius: 9px; border: 1px solid var(--leiste-knopf-rand);
+  background: transparent; color: var(--leiste-text); cursor: pointer; white-space: nowrap; font-size: 15px;
 }
-.leiste button:hover { border-color: #6b6e78; }
+.leiste button:hover { border-color: var(--leiste-gedaempft); }
 .leiste button.an { background: #c8102e; color: #fff; border-color: #c8102e; }
-.sprachen { display: inline-flex; border: 1px solid #3a3c43; border-radius: 9px; overflow: hidden; flex: none; }
-.sprachen button { border: 0; border-radius: 0; min-width: 38px; padding: 4px 7px; }
-.sprachen button.an { background: #e6e6e8; color: #141518; border: 0; }
+.sprachen, .themen { display: inline-flex; border: 1px solid var(--leiste-knopf-rand); border-radius: 9px; overflow: hidden; flex: none; }
+.sprachen button, .themen button { border: 0; border-radius: 0; min-width: 38px; padding: 4px 7px; }
+.sprachen button.an, .themen button.an { background: var(--leiste-text); color: var(--leiste-bg); border: 0; }
+.themen button { display: inline-flex; align-items: center; justify-content: center; min-width: 34px; }
+.themen button svg { width: 19px; height: 19px; display: block; }
 .knopf {
   min-height: 36px; padding: 4px 12px; border-radius: 9px; border: 1px solid var(--panel-rand);
   background: transparent; cursor: pointer; white-space: nowrap; color: var(--text);
@@ -139,22 +155,22 @@ body.split #pane-hilfe .hilfe-kopf .schliessen { display: none; }
   box-shadow: 0 3px 0 #123a83, 0 5px 7px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.3);
 }
 .taste.rund .kappe {
-  border-radius: 50%;
-  background: radial-gradient(circle at 50% 38%, #f4f4f4, #a9aaad 45%, #6f7074 70%, #c7c8cb 100%);
-  box-shadow: 0 3px 0 #2a2a2c, 0 5px 8px rgba(0,0,0,.55), inset 0 0 0 2px rgba(0,0,0,.25);
+  /* SHIFT, ALPHA, MENU, ON: runde, matt silberne Tasten wie am Gerät – flach, ohne Glanzkugel */
+  border-radius: 50%; box-sizing: border-box; border: 1px solid #7d7f84;
+  background: linear-gradient(#f2f2f3, #c8c9cc);
+  box-shadow: 0 3px 0 #55575c, 0 4px 7px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.85);
 }
-.taste.rund .kappe::after { content: ''; width: 46%; height: 46%; border-radius: 50%; background: repeating-radial-gradient(circle, rgba(0,0,0,.08) 0 1px, transparent 1px 3px); }
 .taste.gedrueckt .kappe, .taste:active .kappe { transform: translateY(2px); filter: brightness(.88); box-shadow: 0 1px 0 #000, 0 2px 3px rgba(0,0,0,.5); }
 .taste.hervor .kappe { outline: 3px solid #ffcf3d; outline-offset: 2px; }
 .taste:focus-visible .kappe { outline: 3px solid #5ab0ff; outline-offset: 2px; }
 
 /* Steuerkreuz */
 .kreuz {
-  position: absolute; left: 117px; top: 2px; width: 118px; height: 90px; border-radius: 50%;
-  background: radial-gradient(ellipse at 50% 45%, #f1f1f2, #9c9da1 55%, #5c5d61 80%, #cfd0d3);
-  box-shadow: 0 4px 0 #222, 0 6px 10px rgba(0,0,0,.6);
+  position: absolute; left: 117px; top: 2px; width: 118px; height: 90px; border-radius: 50%; box-sizing: border-box;
+  border: 1px solid #7d7f84; background: linear-gradient(#f0f0f1, #c3c4c7);
+  box-shadow: 0 4px 0 #55575c, 0 6px 10px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.85);
 }
-.kreuz::after { content: ''; position: absolute; left: 34%; top: 32%; width: 32%; height: 36%; border-radius: 50%; background: radial-gradient(circle, #2c2d31, #111); box-shadow: inset 0 2px 4px rgba(0,0,0,.8); }
+.kreuz::after { content: ''; position: absolute; left: 34%; top: 32%; width: 32%; height: 36%; border-radius: 50%; background: #2b2c30; box-shadow: inset 0 1px 3px rgba(0,0,0,.7); }
 .taste.pfeil { color: #2a2a2a; font-size: 13px; z-index: 1; }
 .taste.pfeil .kappe { border-radius: 50%; }
 .taste.pfeil.gedrueckt .kappe, .taste.pfeil:active .kappe { background: rgba(0,0,0,.18); }
@@ -314,7 +330,7 @@ body.split #pane-hilfe .hilfe-kopf .schliessen { display: none; }
 }
 .kappe-mini.zahl { background: linear-gradient(#fff, #e1e1e1); color: #1d1d1f; box-shadow: 0 2px 0 #9a9a9d; }
 .kappe-mini.blau { background: linear-gradient(#3b86f0, #1f5cc6); color: #fff; }
-.kappe-mini.rund { border-radius: 15px; background: radial-gradient(circle at 50% 35%, #f4f4f4, #a5a6a9); color: #222; }
+.kappe-mini.rund { border-radius: 15px; background: linear-gradient(#f2f2f3, #c8c9cc); color: #222; box-shadow: 0 2px 0 #77797e; }
 .kappe-mini.shiftaktiv { box-shadow: 0 0 0 2px var(--gelb); }
 .kappe-mini .s { color: var(--gelb); font-size: .8em; margin-left: 4px; }
 .kappe-mini .a { color: var(--rot); font-size: .8em; margin-left: 4px; }
@@ -442,7 +458,7 @@ body.beamer .gk-zeichen { font-size: 36px; }
 
 /* MARK: Beamer / Präsentation */
 
-body.beamer #pane-calc { background: #0b0c0e; }
+body.beamer #pane-calc { background: var(--beamer-grund); }
 /* Platz der Tastenspur immer reserviert: der Rechner springt beim ersten Tastendruck nicht */
 body.beamer #tastenspur, body.beamer #tastenspur:empty { display: flex; height: 50px; }
 body.beamer #tastenspur .kappe-mini { min-width: 44px; height: 44px; font-size: 20px; border-radius: 9px; padding: 0 10px; }
@@ -455,9 +471,10 @@ body.beamer #tastenspur .kappe-mini { min-width: 44px; height: 44px; font-size: 
   .leiste .sprachen { margin-right: auto; }
 }
 @container rechner (max-width: 430px) {
-  .leiste { gap: 5px; padding-left: 8px; padding-right: 8px; }
-  .leiste button { padding: 4px 8px; min-height: 34px; font-size: 14px; }
-  .sprachen button { min-width: 32px; padding: 4px 3px; }
+  .leiste { gap: 4px; padding-left: 6px; padding-right: 6px; }
+  .leiste button { padding: 4px 7px; min-height: 34px; font-size: 14px; }
+  .sprachen button { min-width: 30px; padding: 4px 3px; }
+  .themen button { min-width: 30px; padding: 4px 4px; }
 }
 @media (max-width: 700px) {
   .leiste .marke { display: none; }

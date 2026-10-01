@@ -1,11 +1,12 @@
 // sw.js – Service Worker der Web-App: lädt beim Installieren alle Dateien vorab (offline im Klassenraum,
 // im Flugmodus) und liefert sie danach aus diesem versionierten Zwischenspeicher. Alle Dateien einer Version
-// gehören zusammen (nie alte und neue Module mischen): Neue Version = VERSION erhöhen → der Browser
-// installiert sie im Hintergrund, die App übernimmt sie, sobald sie im Hintergrund ist (skipWaiting per
-// Nachricht aus app.js) und lädt beim nächsten Anzeigen neu. Alte Zwischenspeicher werden gelöscht.
+// gehören zusammen: Neue Version = VERSION erhöhen → der Browser lädt sie beim nächsten Öffnen im
+// Hintergrund komplett herunter, danach wird sie sofort aktiv (skipWaiting): schon das nächste Neuladen
+// zeigt sie (app.js lädt selbst neu, solange noch nichts eingegeben wurde). Alte Zwischenspeicher werden
+// gelöscht. Die App lädt alle Module beim Start, eine laufende ältere Seite holt danach nichts mehr nach.
 // Auf temmchen.github.io teilen sich mehrere Apps den Ursprung: nur Zwischenspeicher mit „fx991-“ anfassen
 // und nur Anfragen innerhalb des eigenen Bereichs (scope) beantworten.
-const VERSION = '1.1.0';
+const VERSION = '1.2.0';
 const PREFIX = 'fx991-';
 const CACHE = PREFIX + VERSION;
 
@@ -73,16 +74,18 @@ const FILES = [
   'icons/maskable-512.png',
 ];
 
-// MARK: Installieren: alles frisch vom Server holen (am HTTP-Cache vorbei)
-// Die erste Version wird sofort aktiv; eine neue wartet, bis app.js „skipWaiting“ schickt.
+// MARK: Installieren: alles frisch vom Server holen (am HTTP-Cache vorbei), dann sofort übernehmen.
+// Scheitert das Herunterladen (Netz weg), bleibt die bisherige Version aktiv.
 
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE);
     await cache.addAll(FILES.map((f) => new Request(f, { cache: 'reload' })));
+    await self.skipWaiting();
   })());
 });
 
+// ältere Seiten (bis 1.1.0) bitten per Nachricht um die Übernahme
 self.addEventListener('message', (event) => {
   // waitUntil: der Worker darf nicht beendet werden, bevor das Übernehmen angestoßen ist
   if (event.data !== 'skipWaiting') return;

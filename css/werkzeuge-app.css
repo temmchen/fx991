@@ -112,16 +112,16 @@ body.mathbar-on .pane-body { padding-bottom: 72px; }
 #tabbar button span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 @media (max-width: 400px) { #tabbar button { font-size: 9.5px; letter-spacing: -0.15px; } }
 
-/* Rechner-Reiter: dunkle Leiste passend zum Casio-Gehäuse */
-body.tab-calc #tabbar { background: rgba(20, 21, 24, 0.95); border-top-color: #2B2D33; }
-body.tab-calc #tabbar button { color: #8E9099; }
-body.tab-calc #tabbar button.on { color: #6EA4FF; }
-body.tab-calc { background: #141518; }
+/* Rechner-Reiter: im dunklen Erscheinungsbild Leiste passend zum Casio-Gehäuse */
+:root[data-theme="dark"] body.tab-calc #tabbar { background: rgba(20, 21, 24, 0.95); border-top-color: #2B2D33; }
+:root[data-theme="dark"] body.tab-calc #tabbar button { color: #8E9099; }
+:root[data-theme="dark"] body.tab-calc #tabbar button.on { color: #6EA4FF; }
+body.tab-calc { background: var(--casio-grund, #141518); }
 
 /* Quer-/Breitformat: Rechner links, Arbeitsbereich rechts */
 body.split #panes { display: flex; }
 body.split .pane { position: relative; inset: auto; }
-body.split #pane-calc { display: flex; flex: 0 0 var(--calc-w, 40%); border-right: 0.5px solid #000; }
+body.split #pane-calc { display: flex; flex: 0 0 var(--calc-w, 40%); border-right: 0.5px solid var(--leiste-rand, #000); }
 body.split .pane.active:not(#pane-calc) { flex: 1; min-width: 0; }
 body.split #tabbar button[data-tab="calc"] { display: none; }
 

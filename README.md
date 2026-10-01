@@ -36,9 +36,11 @@ Schablonen, exakte Ergebnisse (Brüche, Wurzeln, π) und dieselbe Rangfolge der 
   Lernkarte, Bedeutung in Elektrotechnik, Physik/Mechanik und Mathematik, Konstanten und
   Kennwerte (ε₀, μ₀, ω, ϱ/ϰ/α von Kupfer und Aluminium …) – mit **▶** führt der Rechner vor, wie man
   sie eintippt (CONST). Nach dem Skript „Das griechische Alphabet in der Technik“.
-- **Beamer**-Modus mit großer Tastenspur, **QR**-Knopf (bildschirmfüllend, auch Taste Q).
+- **Beamer**-Modus mit großer Tastenspur, **QR**-Knopf (bildschirmfüllend, auch Taste Q),
+  **hell/dunkel** per Knopf ☀︎ | ☾ (ohne Wahl wie das System).
 - Hochformat: ein Bereich mit Reiterleiste; Querformat/Laptop: Rechner links, Hilfe oder Werkzeug rechts.
 - Läuft **offline** (Service Worker). Auf dem iPhone: Safari → Teilen → „Zum Home-Bildschirm“.
+  Neue Versionen lädt der Trainer im Hintergrund; sie gelten ab dem nächsten Neuladen bzw. Öffnen.
 
 Sprache per Knopf oder Adresse: `?lang=de`, `?lang=en`, `?lang=fr`; `?beamer=1`, `?hilfe=1`,
 `?tab=graph|analysis|equations|solver|hilfe`, Funktionen direkt zeichnen: `?f=x^2-4;sin(x)`.
@@ -81,7 +83,9 @@ Tests (JavaScriptCore, auf jedem Mac vorhanden):
 
 Sie spielen Tastenfolgen am ganzen Rechner ab und prüfen jede Tastenfolge und jede Musterlösung
 aller Lektionen in allen drei Sprachen, die Übersetzung Casio → Graph (gleiche Werte wie der Rechner)
-und die Konstanten der αβγ-Seite. Bei jeder Veröffentlichung `VERSION` in `sw.js` erhöhen.
+und die Konstanten der αβγ-Seite. Bei jeder Veröffentlichung `VERSION` in `sw.js` erhöhen: der neue
+Service Worker lädt alle Dateien und übernimmt sofort (skipWaiting); eine offene Seite lädt selbst neu,
+solange noch nichts eingegeben wurde, sonst beim nächsten Verlassen.
 
 ---
 

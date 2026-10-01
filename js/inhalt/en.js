@@ -62,7 +62,10 @@ export default {
     zuruecksetzenFrage: 'Clear the graph and reset Analysis, Equations and the Solver values? The calculator stays as it is.',
     zuruecksetzenOk: 'Reset',
     zurueckgesetzt: 'Tools reset',
-    neueVersion: 'New version loaded – active the next time you open the app',
+    neueVersion: 'New version loaded – it appears the next time you reload',
+    themaTitel: 'Appearance',
+    thema_light: 'light',
+    thema_dark: 'dark',
   },
 
   lektionen: [

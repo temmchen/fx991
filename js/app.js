@@ -43,9 +43,9 @@ const UI_MODULE = {
 
 /// Casio-Gehäuse (Entwurfsgröße, tastatur.js)
 const GERAET = { breite: 400, hoehe: 860 };
-/// Querformat: Mindestbreite rechts (Arbeitsbereich) und links (Leiste mit Sprache, Tastenhilfe, Beamer, QR)
+/// Querformat: Mindestbreite rechts (Arbeitsbereich) und links (Leiste mit Sprache, Tastenhilfe, Beamer, Erscheinungsbild, QR)
 const ARBEIT_MIN = 380;
-const RECHNER_MIN = 360;
+const RECHNER_MIN = 400;
 
 const body = document.body;
 const rootEl = document.documentElement;
@@ -60,7 +60,7 @@ function schreib(k, v) {
   try { localStorage.setItem(k, v); return true; } catch (e) { return false; /* privater Modus: ohne Speichern */ }
 }
 
-let ui = { sprache: null, beamer: false, tab: 'calc' };
+let ui = { sprache: null, beamer: false, tab: 'calc', thema: 'system' };
 try { ui = { ...ui, ...JSON.parse(lies(UI_SPEICHER) || '{}') }; } catch (e) { /* Voreinstellung */ }
 function uiSichern() { schreib(UI_SPEICHER, JSON.stringify(ui)); }
 
@@ -487,17 +487,51 @@ function refreshPane(id, force = false) {
   try { p.refresh(force ? { force: true } : undefined); } catch (e) { console.error(`fx991: refresh ${id}`, e); }
 }
 
-// MARK: Erscheinungsbild (folgt dem System; der Rechner-Reiter bleibt im Casio-Look)
+// MARK: Erscheinungsbild: hell oder dunkel (Knöpfe ☀︎ | ☾ in der Rechner-Leiste). Bis zur ersten Wahl
+// folgt es dem System. Das Casio-Gehäuse bleibt immer dunkel; Fläche, Leisten, Hilfe und Werkzeuge folgen.
 
+const THEMEN = ['system', 'light', 'dark'];
+let thema = THEMEN.includes(ui.thema) ? ui.thema : 'system';
 const darkQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+const themaGruppe = document.querySelector('.leiste .themen');
+const themaKnoepfe = Array.from(document.querySelectorAll('.leiste [data-thema]'));
+const THEMA_SYMBOL = {
+  light: '<g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></g>',
+  dark: '<path d="M19.6 14.6A8 8 0 0 1 9.4 4.4a8 8 0 1 0 10.2 10.2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
+};
 function applyTheme() {
-  const theme = darkQuery && darkQuery.matches ? 'dark' : 'light';
+  const dark = thema === 'dark' || (thema === 'system' && !!(darkQuery && darkQuery.matches));
+  const theme = dark ? 'dark' : 'light';
   if (rootEl.dataset.theme !== theme) rootEl.dataset.theme = theme;
   if (W) W.ctx.theme = theme;
   updateThemeColor();
+  zeigeThemaKnoepfe();
+}
+/// Knöpfe: Symbol, gedrückt = sichtbares Erscheinungsbild, Text für Vorlesen und Tooltip
+function zeigeThemaKnoepfe() {
+  if (themaGruppe) themaGruppe.setAttribute('aria-label', t('ui.themaTitel'));
+  for (const b of themaKnoepfe) {
+    const id = b.dataset.thema;
+    if (!b.firstChild) b.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${THEMA_SYMBOL[id]}</svg>`;
+    const an = rootEl.dataset.theme === id;
+    b.classList.toggle('an', an);
+    b.setAttribute('aria-pressed', an ? 'true' : 'false');
+    const text = `${t('ui.themaTitel')}: ${t('ui.thema_' + id)}`;
+    b.title = text;
+    b.setAttribute('aria-label', text);
+  }
+}
+for (const b of themaKnoepfe) {
+  b.addEventListener('click', () => {
+    thema = b.dataset.thema;
+    ui.thema = thema;
+    uiSichern();
+    applyTheme();
+    scheduleRefresh(true);                     // Graph-Zeichenflächen in den neuen Farben
+  });
 }
 if (darkQuery) {
-  const onSystemTheme = () => { applyTheme(); scheduleRefresh(true); };
+  const onSystemTheme = () => { if (thema !== 'system') return; applyTheme(); scheduleRefresh(true); };
   if (typeof darkQuery.addEventListener === 'function') darkQuery.addEventListener('change', onSystemTheme);
   else if (typeof darkQuery.addListener === 'function') darkQuery.addListener(onSystemTheme);
 }
@@ -505,7 +539,8 @@ if (darkQuery) {
 function updateThemeColor() {
   const meta = document.querySelector('meta[name="theme-color"]');
   if (!meta) return;
-  const c = shownTab() === 'calc' ? '#141518' : (rootEl.dataset.theme === 'dark' ? '#0F0F0E' : '#F2F1EE');
+  const dark = rootEl.dataset.theme === 'dark';
+  const c = shownTab() === 'calc' ? (dark ? '#141518' : '#E6E5E1') : (dark ? '#0F0F0E' : '#F2F1EE');
   if (meta.getAttribute('content') !== c) meta.setAttribute('content', c);
 }
 
@@ -875,6 +910,7 @@ function wendeSpracheAn(s) {
     paneNodes[tab.id]?.setAttribute('aria-label', uiText(s, tab.t));
   }
   hilfe.setzeSprache(s);
+  zeigeThemaKnoepfe();
   if (tastenhilfe) zeigeBanner(t('ui.tastenhilfeBanner'));
   zeichne();
   sichern();
@@ -1028,34 +1064,43 @@ starteWerkzeuge().then(() => {
 window.__fx991Started = true;
 document.getElementById('boot-fail')?.remove();
 
-// MARK: Offline (Service Worker)
+// MARK: Offline (Service Worker) und Updates
+// sw.js übernimmt eine neue Version gleich nach dem Herunterladen (skipWaiting): das nächste Neuladen
+// bzw. Öffnen zeigt sie. Die laufende Seite lädt selbst neu, solange noch nichts eingegeben wurde, sonst
+// beim nächsten Verlassen (Wechsel in eine andere App, anderer Tab) oder spätestens beim Zurückkehren.
 
 // lokal (Entwicklung) ohne Service Worker, damit immer der aktuelle Stand geladen wird
 const lokal = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) && params.get('sw') !== '1';
 if ('serviceWorker' in navigator && location.protocol !== 'file:' && !lokal) {
-  const hatteSteuerung = !!navigator.serviceWorker.controller;
-  navigator.serviceWorker.register('sw.js').then((reg) => {
-    const pruefe = () => {
-      if (reg.waiting && document.visibilityState === 'hidden') reg.waiting.postMessage('skipWaiting');
-    };
-    reg.addEventListener('updatefound', () => {
-      const neu = reg.installing;
-      if (!neu) return;
-      neu.addEventListener('statechange', () => {
-        if (neu.state === 'installed' && hatteSteuerung) toast(t('ui.neueVersion'));
-        pruefe();
-      });
-    });
-    document.addEventListener('visibilitychange', pruefe);
-  }).catch(() => { /* ohne Offline-Fähigkeit */ });
+  const hatteSteuerung = !!navigator.serviceWorker.controller;   // erste Installation: nichts neu laden
+  let reg = null;
+  let letztePruefung = Date.now();
+  let benutzt = false;                  // schon getippt/geklickt? Dann nicht mitten in der Arbeit neu laden
+  let updateBereit = false;
   let neuGeladen = false;
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (neuGeladen || !hatteSteuerung) return;
+  const merke = () => { benutzt = true; };
+  document.addEventListener('pointerdown', merke, { capture: true, once: true });
+  document.addEventListener('keydown', merke, { capture: true, once: true });
+  const neuLaden = () => {
+    if (neuGeladen) return;
     neuGeladen = true;
-    if (document.visibilityState === 'hidden') {
-      sofortSichern();
-      if (W) W.saveNow();
-      location.reload();
+    sofortSichern();
+    try { if (W) W.saveNow(); } catch (e) { /* trotzdem neu laden */ }
+    location.reload();
+  };
+  navigator.serviceWorker.register('sw.js').then((r) => { reg = r; }).catch(() => { /* ohne Offline-Fähigkeit */ });
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!hatteSteuerung || neuGeladen) return;
+    if (document.visibilityState === 'hidden' || !benutzt) { neuLaden(); return; }
+    updateBereit = true;
+    toast(t('ui.neueVersion'));
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (updateBereit) { neuLaden(); return; }   // verlassen (im Hintergrund) oder zurückgekehrt
+    // länger offene App (Handy): beim Zurückkehren nach einer neuen Version sehen (höchstens alle 30 min)
+    if (document.visibilityState === 'visible' && reg && Date.now() - letztePruefung > 30 * 60 * 1000) {
+      letztePruefung = Date.now();
+      reg.update().catch(() => {});
     }
   });
 }

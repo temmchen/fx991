@@ -40,14 +40,15 @@
   <script>
     // Erscheinungsbild und Reiter vor dem ersten Zeichnen setzen (sonst blitzt eine falsche Fläche auf)
     (function () {
-      var tab = 'calc';
+      var tab = 'calc', thema = 'system';
       try {
         var u = JSON.parse(localStorage.getItem('fx991.ui') || 'null');
         if (u && typeof u.tab === 'string') tab = u.tab;
+        if (u && (u.thema === 'light' || u.thema === 'dark')) thema = u.thema;
         var m = /[?&]tab=([a-z]+)/.exec(location.search);
         if (m) tab = m[1];
       } catch (e) { /* Voreinstellung */ }
-      var dark = !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      var dark = thema === 'dark' || (thema === 'system' && !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches));
       document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
       document.body.className = 'tab-' + tab;
     })();
@@ -64,6 +65,10 @@
           </div>
           <button type="button" id="knopf-tastenhilfe" data-t="ui.tastenhilfe">Tastenhilfe</button>
           <button type="button" id="knopf-beamer" class="breit" data-t="ui.beamer">Beamer</button>
+          <div class="themen" role="group" aria-label="Erscheinungsbild">
+            <button type="button" data-thema="light" aria-label="hell"></button>
+            <button type="button" data-thema="dark" aria-label="dunkel"></button>
+          </div>
           <button type="button" id="knopf-qr" aria-label="QR-Code">QR</button>
         </header>
         <div id="rechner-bereich">

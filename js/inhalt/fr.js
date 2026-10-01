@@ -64,7 +64,10 @@ export default {
     zuruecksetzenFrage: "Effacer le graphique et réinitialiser Analyse, Équations et les valeurs du Solveur ? La calculatrice reste inchangée.",
     zuruecksetzenOk: "Réinitialiser",
     zurueckgesetzt: "Outils réinitialisés",
-    neueVersion: "Nouvelle version chargée – active à la prochaine ouverture",
+    neueVersion: "Nouvelle version chargée – elle apparaît au prochain rechargement",
+    themaTitel: "Apparence",
+    thema_light: "clair",
+    thema_dark: "sombre",
   },
 
   lektionen: [
