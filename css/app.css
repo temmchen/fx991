@@ -1,0 +1,459 @@
+/* app.css – Seite, Gehäuse in Casio-Optik, LCD, Tasten, Hilfe, Beamer, Handy. */
+
+:root {
+  --seite: #e8e5df;
+  --seite-text: #1d1d1f;
+  --panel: #fbfaf7;
+  --panel-rand: #d9d5cc;
+  --panel-text: #222;
+  --panel-gedaempft: #6b675f;
+  --akzent: #c8102e;
+  --akzent-hell: #fde8ec;
+  --gruen: #1f7a3f;
+  --gruen-hell: #e2f4e8;
+  --gelb: #e6b422;
+  --rot: #e8325f;
+  --blau: #33a3df;
+  --lila: #a77de0;
+  --koerper: #1c1c1f;
+  --lcd: #c5ccb3;
+  --lcd-text: #1a1e15;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --seite: #141518;
+    --seite-text: #ecebe8;
+    --panel: #1e1f23;
+    --panel-rand: #34363c;
+    --panel-text: #e9e7e2;
+    --panel-gedaempft: #a19d94;
+    --akzent-hell: #3a1d24;
+    --gruen-hell: #173323;
+  }
+}
+:root[data-theme="dark"] {
+  --seite: #141518;
+  --seite-text: #ecebe8;
+  --panel: #1e1f23;
+  --panel-rand: #34363c;
+  --panel-text: #e9e7e2;
+  --panel-gedaempft: #a19d94;
+  --akzent-hell: #3a1d24;
+  --gruen-hell: #173323;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--seite);
+  color: var(--seite-text);
+  font: 16px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
+}
+button { font: inherit; color: inherit; }
+
+/* MARK: Seitenaufbau */
+
+#app { display: flex; flex-direction: column; height: 100%; height: 100dvh; }
+
+.leiste {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: calc(env(safe-area-inset-top, 0px) + 6px) max(12px, env(safe-area-inset-right)) 6px max(12px, env(safe-area-inset-left));
+  border-bottom: 1px solid var(--panel-rand);
+  background: var(--panel);
+  z-index: 5;
+}
+.leiste .marke { font-weight: 700; letter-spacing: .01em; margin-right: auto; white-space: nowrap; }
+.leiste .marke small { font-weight: 500; color: var(--panel-gedaempft); margin-left: 6px; }
+.leiste button, .knopf {
+  min-height: 36px; padding: 4px 12px; border-radius: 9px; border: 1px solid var(--panel-rand);
+  background: transparent; cursor: pointer; white-space: nowrap;
+}
+.leiste button:hover, .knopf:hover { border-color: var(--panel-gedaempft); }
+.leiste button.an { background: var(--akzent); color: #fff; border-color: var(--akzent); }
+.sprachen { display: inline-flex; border: 1px solid var(--panel-rand); border-radius: 9px; overflow: hidden; }
+.sprachen button { border: 0; border-radius: 0; min-width: 40px; padding: 4px 8px; }
+.sprachen button.an { background: var(--seite-text); color: var(--seite); }
+
+main { flex: 1; display: flex; min-height: 0; }
+#rechner-bereich {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  min-width: 0; min-height: 0; padding: 10px 10px calc(env(safe-area-inset-bottom, 0px) + 10px); overflow: hidden; position: relative;
+}
+#geraet-rahmen { position: relative; flex: none; }
+#geraet { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+
+#hilfe {
+  width: min(520px, 46vw); border-left: 1px solid var(--panel-rand); background: var(--panel); color: var(--panel-text);
+  display: flex; flex-direction: column; min-height: 0;
+}
+#hilfe[hidden] { display: none; }
+
+/* MARK: Gehäuse (Entwurfsgröße 400 × 846, wird skaliert) */
+
+.geraet {
+  width: 400px; height: 860px; border-radius: 34px 34px 40px 40px; position: relative;
+  background:
+    radial-gradient(120% 60% at 30% 0%, rgba(255,255,255,.07), transparent 60%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,.035) 0 2px, transparent 2px 5px),
+    repeating-linear-gradient(-45deg, rgba(255,255,255,.025) 0 2px, transparent 2px 5px),
+    var(--koerper);
+  box-shadow: 0 0 0 3px #3a3b3f, 0 0 0 6px #c9cacc, 0 0 0 9px #8e9094, 0 18px 40px rgba(0,0,0,.45);
+  user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+  font-family: ui-rounded, "Arial Rounded MT Bold", "SF Pro Rounded", "Helvetica Neue", Arial, sans-serif;
+}
+.geraet .kopf { position: absolute; left: 30px; right: 26px; top: 26px; height: 112px; }
+.geraet .name {
+  position: absolute; left: 0; top: 4px; color: #e9eaec; font: 800 31px/1 "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: .02em; text-shadow: 0 1px 0 rgba(0,0,0,.6); white-space: nowrap;
+}
+.geraet .modell { position: absolute; left: 30px; top: 50px; color: #e6e6e6; font: 500 18px/1 "Helvetica Neue", Arial, sans-serif; letter-spacing: .02em; }
+.geraet .linie { position: absolute; left: 12px; top: 80px; color: var(--rot); font: 600 21px/1 "Avenir Next Condensed", "Arial Narrow", sans-serif; letter-spacing: .32em; }
+.geraet .solar {
+  position: absolute; right: 0; top: 2px; width: 156px; height: 58px; border-radius: 6px;
+  background: linear-gradient(160deg, #3b2b24, #20140f 55%, #2c1d17); box-shadow: inset 0 0 0 2px #121212, inset 0 3px 6px rgba(0,0,0,.6);
+}
+.geraet .solar::after { content: ''; position: absolute; inset: 4px; background: repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 38px); }
+
+.lcd-rahmen {
+  position: absolute; left: 22px; right: 22px; top: 146px; height: 176px; border-radius: 14px;
+  background: linear-gradient(#2c2d31, #1b1c1f); box-shadow: inset 0 0 0 2px #121214, 0 1px 0 rgba(255,255,255,.08);
+  padding: 13px 15px 16px;
+}
+.lcd {
+  height: 100%; border-radius: 4px; position: relative; overflow: hidden;
+  background: linear-gradient(180deg, #b9c1a6, var(--lcd) 30%, #c9d0b8);
+  box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
+  color: var(--lcd-text); padding: 2px 6px 4px;
+  font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+}
+.lcd.aus { background: linear-gradient(180deg, #a9b098, #b4bba3); }
+.lcd.aus > * { display: none; }
+
+/* MARK: Tasten */
+
+.tasten { position: absolute; left: 24px; right: 24px; top: 346px; bottom: 26px; }
+.taste {
+  position: absolute; border: 0; padding: 0; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  display: flex; align-items: center; justify-content: center; touch-action: manipulation;
+}
+.taste .kappe {
+  display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;
+  border-radius: 9px 9px 12px 12px; font-weight: 700; pointer-events: none;
+  transition: transform .06s, box-shadow .06s, filter .06s;
+}
+.taste.funktion .kappe {
+  background: linear-gradient(#3a3a3e, #1a1a1d 70%); color: #f3f3f3; font-size: 15px;
+  box-shadow: 0 3px 0 #0a0a0b, 0 4px 6px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.12);
+}
+.taste.zahl .kappe {
+  background: linear-gradient(#ffffff, #e2e2e2 75%); color: #1d1d1f; font-size: 25px; font-weight: 600;
+  box-shadow: 0 3px 0 #9a9a9d, 0 5px 7px rgba(0,0,0,.5), inset 0 1px 0 #fff;
+}
+.taste.blau .kappe {
+  background: linear-gradient(#3b86f0, #1f5cc6 75%); color: #fff; font-size: 22px; font-weight: 600;
+  box-shadow: 0 3px 0 #123a83, 0 5px 7px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.3);
+}
+.taste.rund .kappe {
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 38%, #f4f4f4, #a9aaad 45%, #6f7074 70%, #c7c8cb 100%);
+  box-shadow: 0 3px 0 #2a2a2c, 0 5px 8px rgba(0,0,0,.55), inset 0 0 0 2px rgba(0,0,0,.25);
+}
+.taste.rund .kappe::after { content: ''; width: 46%; height: 46%; border-radius: 50%; background: repeating-radial-gradient(circle, rgba(0,0,0,.08) 0 1px, transparent 1px 3px); }
+.taste.gedrueckt .kappe, .taste:active .kappe { transform: translateY(2px); filter: brightness(.88); box-shadow: 0 1px 0 #000, 0 2px 3px rgba(0,0,0,.5); }
+.taste.hervor .kappe { outline: 3px solid #ffcf3d; outline-offset: 2px; }
+.taste:focus-visible .kappe { outline: 3px solid #5ab0ff; outline-offset: 2px; }
+
+/* Steuerkreuz */
+.kreuz {
+  position: absolute; left: 117px; top: 2px; width: 118px; height: 90px; border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 45%, #f1f1f2, #9c9da1 55%, #5c5d61 80%, #cfd0d3);
+  box-shadow: 0 4px 0 #222, 0 6px 10px rgba(0,0,0,.6);
+}
+.kreuz::after { content: ''; position: absolute; left: 34%; top: 32%; width: 32%; height: 36%; border-radius: 50%; background: radial-gradient(circle, #2c2d31, #111); box-shadow: inset 0 2px 4px rgba(0,0,0,.8); }
+.taste.pfeil { color: #2a2a2a; font-size: 13px; z-index: 1; }
+.taste.pfeil .kappe { border-radius: 50%; }
+.taste.pfeil.gedrueckt .kappe, .taste.pfeil:active .kappe { background: rgba(0,0,0,.18); }
+
+/* Beschriftungen über den Tasten */
+.beschr {
+  position: absolute; display: flex; justify-content: space-between; align-items: flex-end; gap: 1px; height: 12px;
+  font: 700 10.5px/1 ui-rounded, "Arial Rounded MT Bold", "Helvetica Neue", Arial, sans-serif; white-space: nowrap; pointer-events: none;
+  letter-spacing: -.01em;
+}
+.beschr .klein { font-size: 8.5px; letter-spacing: -.03em; }
+.beschr .periode-sym { display: inline-block; border-top: 1.5px solid currentColor; padding-top: 1px; line-height: 1; }
+.beschr .s { color: var(--gelb); }
+.beschr .a { color: var(--rot); }
+.beschr .b { color: var(--blau); }
+.beschr .k { color: var(--lila); }
+.beschr .w { color: #f0f0f0; }
+.beschr .klammer { border: 1.5px solid var(--blau); border-bottom: 0; padding: 0 2px 1px; border-radius: 2px 2px 0 0; }
+.beschr .klammer.lila { border-color: var(--lila); }
+.beschr .mitte { flex: 1; text-align: center; }
+
+/* Symbole auf den Tasten */
+.kursivx { font-family: "Times New Roman", Times, serif; font-style: italic; font-weight: 700; font-size: 1.25em; }
+.kb { display: inline-block; width: .55em; height: .62em; border: 1.6px solid currentColor; vertical-align: middle; margin: 0 .03em; border-radius: 1px; }
+.kb.voll { background: currentColor; }
+.kb.klein { width: .4em; height: .45em; }
+.hk { font-size: .62em; vertical-align: .7em; }
+.tk { font-size: .62em; vertical-align: -.25em; }
+.kbruch { display: inline-flex; flex-direction: column; align-items: center; line-height: .5; vertical-align: middle; }
+.kbruch .kstrich { width: 1em; border-top: 2px solid currentColor; margin: .12em 0; }
+
+/* MARK: LCD-Inhalt */
+
+.status { display: flex; gap: 4px; height: 13px; font: 700 9px/13px "Helvetica Neue", Arial, sans-serif; opacity: .9; overflow: hidden; }
+.status .sym { visibility: hidden; }
+.status .sym.an { visibility: visible; }
+.status .sym.kasten.an { border: 1px solid currentColor; padding: 0 2px; line-height: 11px; height: 13px; }
+.status .sym.math { margin-left: auto; }
+.flaeche { position: absolute; left: 6px; right: 6px; top: 16px; bottom: 4px; display: flex; flex-direction: column; }
+
+.lcd .zeile { display: inline-flex; align-items: center; white-space: nowrap; }
+.lcd .eingabe { font-size: 21px; min-height: 40px; overflow: hidden; white-space: nowrap; padding: 2px 2px 0; flex: none; display: flex; align-items: center; }
+.lcd .ergebnis { margin-top: auto; text-align: right; font-size: 24px; white-space: nowrap; overflow: hidden; padding: 0 2px 2px; display: flex; justify-content: flex-end; align-items: center; min-height: 34px; }
+.lcd .anhang { margin-left: 4px; }
+.lcd .z, .lcd .op, .lcd .kl { padding: 0 .02em; }
+.lcd .op { padding: 0 .08em; }
+.lcd .neg { font-size: .8em; padding-right: .04em; }
+.lcd .fn { padding-right: .02em; }
+.lcd .var { font-family: "Times New Roman", Times, serif; font-size: 1.12em; }
+.lcd .kursiv { font-family: "Times New Roman", Times, serif; font-style: italic; }
+.lcd .konst { font-family: "Times New Roman", Times, serif; font-size: 1.1em; }
+.lcd .konst.fett { font-weight: 700; font-style: italic; }
+.lcd .hoch { font-size: .62em; align-self: flex-start; margin-top: -.15em; }
+.lcd .post, .lcd .eng, .lcd .conv, .lcd .gms { padding: 0 .04em; }
+.lcd .conv, .lcd .pre { font-size: .75em; }
+.lcd .e10 { padding: 0 .04em; }
+.lcd .e10 .zehn { font-size: .62em; vertical-align: -.2em; }
+.lcd .x10 { padding-left: .06em; display: inline-flex; }
+.lcd .periode { text-decoration: overline; text-decoration-thickness: 1.5px; }
+.lcd .tsep { display: inline-block; width: .22em; }
+
+.lcd .cursor { display: inline-block; width: 2px; height: 1.05em; background: currentColor; margin: 0 -1px; animation: blinken 1s steps(1) infinite; align-self: center; }
+.lcd .cursor.ins { width: .5em; height: .18em; align-self: flex-end; margin: 0; }
+@keyframes blinken { 50% { opacity: 0; } }
+.lcd .leer { display: inline-block; width: .5em; height: .62em; border: 1px dotted currentColor; margin: 0 .05em; }
+
+.lcd .bruch { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; font-size: .82em; margin: 0 .08em; }
+.lcd .bruch .zaehler, .lcd .bruch .nenner { display: flex; justify-content: center; padding: 0 .12em; }
+.lcd .bruch .strich { align-self: stretch; border-top: 1.5px solid currentColor; margin: .08em 0; }
+.lcd .bruch.d { font-size: .75em; }
+.lcd .gemischt { display: inline-flex; align-items: center; }
+.lcd .wurzel { display: inline-flex; align-items: flex-end; }
+.lcd .wurzel .haken { font-size: 1.05em; line-height: 1; margin-right: -.04em; transform: scaleY(1.15); transform-origin: bottom; }
+.lcd .wurzel .radikand { border-top: 1.5px solid currentColor; padding: .06em .06em 0 .04em; }
+.lcd .wurzel .index { font-size: .55em; align-self: flex-start; margin-right: -.3em; margin-top: .1em; }
+.lcd .exponent { font-size: .66em; align-self: flex-start; margin-top: -.25em; padding-left: .02em; }
+.lcd .potenz { display: inline-flex; align-items: flex-start; }
+.lcd .potenz .exponent { margin-top: -.35em; }
+.lcd .logb { display: inline-flex; align-items: center; }
+.lcd .logb .basis { font-size: .62em; align-self: flex-end; margin-bottom: -.2em; }
+.lcd .betrag { display: inline-flex; border-left: 1.5px solid currentColor; border-right: 1.5px solid currentColor; padding: 0 .12em; margin: 0 .08em; }
+.lcd .integral, .lcd .summe, .lcd .ableitung { display: inline-flex; align-items: center; }
+.lcd .grenzen { display: inline-flex; flex-direction: column; align-items: center; margin-right: .06em; }
+.lcd .grenzen .zeichen { font-size: 1.3em; line-height: .9; font-family: "Times New Roman", Times, serif; }
+.lcd .grenzen .oben, .lcd .grenzen .unten { font-size: .55em; display: inline-flex; }
+.lcd .dx { margin-left: .1em; }
+.lcd .stelle { display: inline-flex; align-items: flex-end; }
+.lcd .stelle .senk { font-size: 1.3em; line-height: 1; }
+.lcd .stelle .unten { font-size: .55em; display: inline-flex; align-items: center; }
+.lcd .matrix { display: inline-flex; flex-direction: column; border-left: 2px solid; border-right: 2px solid; padding: 0 4px; font-size: .7em; }
+.lcd .mreihe { display: flex; gap: 10px; justify-content: flex-end; }
+.lcd .mzelle { min-width: 1.6em; text-align: right; display: inline-flex; justify-content: flex-end; }
+.lcd .basen { font-size: .85em; text-align: right; line-height: 1.15; letter-spacing: .03em; }
+
+.lcd.klein .eingabe { font-size: 16px; }
+.lcd.klein .ergebnis { font-size: 18px; }
+
+/* Menüs */
+.lcd .menutitel { font-size: 13px; font-weight: 700; border-bottom: 1px solid rgba(0,0,0,.35); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 10px; }
+.lcd .menuliste { font-size: 15px; display: grid; grid-template-columns: 1fr; row-gap: 1px; padding-right: 12px; }
+.lcd .menuliste.spalten-2 { grid-template-columns: 1fr 1fr; column-gap: 10px; }
+.lcd .menuliste.spalten-3 { grid-template-columns: 1fr 1fr 1fr; column-gap: 8px; }
+.lcd .menueintrag { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.32; }
+.lcd .menueintrag .nr { margin-right: 3px; }
+.lcd .menueintrag.markiert::after { content: ' ◆'; font-size: .7em; vertical-align: .15em; }
+.lcd .rollbalken { position: absolute; right: 0; top: 0; bottom: 0; width: 5px; border: 1px solid rgba(0,0,0,.4); }
+.lcd .rollknopf { position: absolute; left: 0; right: 0; background: var(--lcd-text); }
+.lcd .zurueckpfeil { position: absolute; left: -4px; bottom: -2px; font-size: 9px; }
+.lcd .textzeile { font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.35; }
+.lcd .flaeche.mitte { justify-content: center; text-align: center; }
+.lcd .fehlertitel { font-size: 18px; font-weight: 700; text-align: center; margin: 10px 0 8px; }
+.lcd .fehlerzeile { font-size: 14px; text-align: center; line-height: 1.4; }
+
+/* Hauptmenü */
+.lcd .icons { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.lcd .icon { border: 1px solid rgba(0,0,0,.45); border-radius: 3px; height: 34px; position: relative; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+.lcd .icon .iconnr { position: absolute; left: 2px; top: 0; font-size: 8px; }
+.lcd .icon.gewaehlt { background: var(--lcd-text); color: var(--lcd); }
+
+/* Listen, Abfragen */
+.lcd .werteliste { font-size: 16px; display: flex; flex-direction: column; gap: 1px; overflow: hidden; }
+.lcd .wertzeile { display: flex; align-items: center; gap: 4px; min-height: 22px; white-space: nowrap; }
+.lcd .wertzeile .wname { flex: none; }
+.lcd .wertzeile .wwert { margin-left: auto; }
+.lcd .wertzeile.markiert { background: var(--lcd-text); color: var(--lcd); padding: 0 3px; border-radius: 2px; }
+.lcd .art-loesung .werteliste { flex: 1; justify-content: flex-end; font-size: 20px; }
+.lcd .art-loesung .wertzeile { flex-wrap: wrap; justify-content: space-between; }
+.lcd .art-loesung .wwert { margin-left: auto; }
+.lcd .feld { margin-top: auto; border-top: 1px solid rgba(0,0,0,.3); font-size: 17px; padding-top: 2px; text-align: right; display: flex; justify-content: flex-end; }
+.lcd .gleichung { font-size: 13px; opacity: .85; white-space: nowrap; overflow: hidden; margin-bottom: 2px; }
+
+/* Gitter (Editoren, Tabellen) */
+.lcd table.gitter { border-collapse: collapse; width: 100%; font-size: 13px; table-layout: fixed; }
+.lcd table.gitter th { font-weight: 700; border-bottom: 1px solid rgba(0,0,0,.4); text-align: center; height: 15px; }
+.lcd table.gitter th.nr { width: 18px; border-bottom: 0; text-align: right; padding-right: 3px; font-size: 10px; }
+.lcd table.gitter tr th:first-child:empty { width: 18px; }
+.lcd table.gitter td { text-align: right; padding: 0 3px; height: 19px; border-left: 1px dotted rgba(0,0,0,.35); white-space: nowrap; overflow: hidden; }
+.lcd table.gitter td.gewaehlt { background: var(--lcd-text); color: var(--lcd); }
+.lcd .fuss { margin-top: auto; border-top: 1px solid rgba(0,0,0,.3); font-size: 17px; text-align: right; display: flex; justify-content: flex-end; min-height: 24px; align-items: center; }
+
+/* QR auf dem LCD */
+.lcd .qr-lcd { display: flex; align-items: center; gap: 10px; height: 100%; }
+.lcd .qr-lcd img { height: 100%; image-rendering: pixelated; background: #fff; padding: 3px; }
+.lcd .qr-text { font-size: 14px; }
+
+/* MARK: Tastenspur (Beamer) */
+
+#tastenspur {
+  display: flex; flex-wrap: nowrap; gap: 6px; justify-content: center; align-items: center; min-height: 0;
+  max-width: 100%; overflow: hidden; padding: 6px 4px 0; flex: none;
+}
+#tastenspur:empty { display: none; }
+.kappe-mini {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 30px; height: 30px; padding: 0 7px;
+  border-radius: 7px; font: 700 14px/1 ui-rounded, "Arial Rounded MT Bold", "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(#3a3a3e, #1a1a1d); color: #f3f3f3; box-shadow: 0 2px 0 #000; white-space: nowrap;
+}
+.kappe-mini.zahl { background: linear-gradient(#fff, #e1e1e1); color: #1d1d1f; box-shadow: 0 2px 0 #9a9a9d; }
+.kappe-mini.blau { background: linear-gradient(#3b86f0, #1f5cc6); color: #fff; }
+.kappe-mini.rund { border-radius: 15px; background: radial-gradient(circle at 50% 35%, #f4f4f4, #a5a6a9); color: #222; }
+.kappe-mini.shiftaktiv { box-shadow: 0 0 0 2px var(--gelb); }
+.kappe-mini .s { color: var(--gelb); font-size: .8em; margin-left: 4px; }
+.kappe-mini .a { color: var(--rot); font-size: .8em; margin-left: 4px; }
+.kappe-mini.neu { animation: auftauchen .25s ease-out; }
+@keyframes auftauchen { from { transform: scale(1.35); } }
+
+/* MARK: Hilfe-Panel */
+
+.hilfe-kopf { display: flex; align-items: center; gap: 4px; padding: 8px 10px 0; border-bottom: 1px solid var(--panel-rand); flex-wrap: wrap; }
+.hilfe-kopf .reiter { border: 0; border-bottom: 3px solid transparent; background: none; padding: 8px 10px; cursor: pointer; font-weight: 600; color: var(--panel-gedaempft); }
+.hilfe-kopf .reiter.an { color: var(--panel-text); border-bottom-color: var(--akzent); }
+.hilfe-kopf .schliessen { margin-left: auto; border: 0; background: none; font-size: 22px; cursor: pointer; padding: 4px 10px; color: var(--panel-gedaempft); }
+.hilfe-inhalt { flex: 1; overflow: auto; padding: 14px 18px 40px; -webkit-overflow-scrolling: touch; }
+.hilfe-inhalt h2 { font-size: 21px; margin: 4px 0 10px; line-height: 1.25; }
+.hilfe-inhalt h3 { font-size: 17px; margin: 18px 0 6px; }
+.hilfe-inhalt p { margin: 6px 0 10px; }
+.hilfe-inhalt .gedaempft { color: var(--panel-gedaempft); font-size: 14px; }
+.hilfe-inhalt code, .hilfe-inhalt .ausgabe { font: 600 15px/1.3 ui-monospace, Menlo, monospace; background: rgba(127,127,127,.12); padding: 1px 5px; border-radius: 5px; }
+
+.lektionsliste { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.lektionsliste li button {
+  width: 100%; text-align: left; border: 1px solid var(--panel-rand); background: transparent; border-radius: 12px;
+  padding: 10px 12px; cursor: pointer; display: grid; grid-template-columns: 34px 1fr auto; gap: 10px; align-items: center;
+}
+.lektionsliste li button:hover { border-color: var(--panel-gedaempft); }
+.lektionsliste .lnr { width: 30px; height: 30px; border-radius: 50%; background: var(--seite-text); color: var(--seite); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
+.lektionsliste .ltitel { font-weight: 650; }
+.lektionsliste .lkurz { display: block; font-size: 13.5px; color: var(--panel-gedaempft); margin-top: 1px; }
+.lektionsliste .lstand { font-size: 13px; color: var(--gruen); font-weight: 700; white-space: nowrap; }
+.gruppe-titel { margin: 18px 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--panel-gedaempft); font-weight: 700; }
+
+.schritt { border: 1px solid var(--panel-rand); border-radius: 12px; padding: 10px 12px; margin: 10px 0; }
+.schritt .stext { margin-bottom: 8px; }
+.tastenreihe { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; margin: 6px 0; }
+.tastenreihe .kappe-mini { min-width: 28px; height: 28px; font-size: 13px; }
+.schritt .aktionen { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+.schritt .erwartet { font-size: 14px; color: var(--panel-gedaempft); }
+.schritt .erwartet .formel-anzeige { color: var(--panel-text); }
+.knopf.haupt { background: var(--akzent); border-color: var(--akzent); color: #fff; font-weight: 600; }
+.knopf.klein { min-height: 30px; padding: 2px 10px; font-size: 14px; }
+.hinweisbox { border-left: 4px solid var(--gelb); background: rgba(230,180,34,.12); padding: 8px 12px; border-radius: 0 10px 10px 0; margin: 10px 0; font-size: 15px; }
+.hinweisbox.falle { border-left-color: var(--akzent); background: var(--akzent-hell); }
+.aufgabe { border: 1px solid var(--panel-rand); border-radius: 12px; padding: 10px 12px; margin: 10px 0; }
+.aufgabe .anr { font-weight: 700; margin-right: 6px; }
+.aufgabe .rueckmeldung { margin-top: 8px; font-weight: 600; }
+.aufgabe .rueckmeldung.richtig { color: var(--gruen); }
+.aufgabe .rueckmeldung.falsch { color: var(--akzent); }
+.aufgabe.geloest { border-color: var(--gruen); background: var(--gruen-hell); }
+.navzeile { display: flex; gap: 8px; justify-content: space-between; margin-top: 18px; flex-wrap: wrap; }
+.formel-anzeige { display: inline-flex; vertical-align: middle; font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif; }
+
+/* Formeln im Hilfe-Panel (gleicher Satz wie im LCD) */
+.hilfe-inhalt .zeile, .tastenhilfe .zeile { display: inline-flex; align-items: center; white-space: nowrap; }
+.hilfe-inhalt .bruch { display: inline-flex; flex-direction: column; align-items: center; font-size: .85em; margin: 0 .08em; }
+.hilfe-inhalt .bruch .strich { align-self: stretch; border-top: 1.5px solid currentColor; margin: .06em 0; }
+.hilfe-inhalt .wurzel { display: inline-flex; align-items: flex-end; }
+.hilfe-inhalt .wurzel .radikand { border-top: 1.5px solid currentColor; padding-top: .04em; }
+.hilfe-inhalt .hoch, .hilfe-inhalt .exponent { font-size: .65em; align-self: flex-start; }
+.hilfe-inhalt .periode { text-decoration: overline; }
+.hilfe-inhalt .kursiv, .hilfe-inhalt .var { font-family: "Times New Roman", Times, serif; font-style: italic; }
+
+/* Tastenhilfe */
+.tastenkarte { border: 1px solid var(--panel-rand); border-radius: 12px; padding: 12px; margin: 8px 0; }
+.tastenkarte .tk-kopf { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.tastenkarte dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 10px; }
+.tastenkarte dt { font-weight: 700; white-space: nowrap; }
+.tastenkarte dt.s { color: #b8860b; }
+.tastenkarte dt.a { color: var(--akzent); }
+.tastenkarte dd { margin: 0; }
+.tastenuebersicht { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 14px; }
+.tastenuebersicht button { cursor: pointer; border: 0; padding: 0; background: none; }
+
+.banner {
+  position: absolute; left: 50%; top: 8px; transform: translateX(-50%); z-index: 3;
+  background: #ffcf3d; color: #222; font-weight: 700; font-size: 14px; padding: 6px 14px; border-radius: 20px;
+  box-shadow: 0 3px 10px rgba(0,0,0,.3); white-space: nowrap;
+}
+.banner[hidden] { display: none; }
+
+/* MARK: QR-Vollbild */
+
+#qr-vollbild {
+  position: fixed; inset: 0; z-index: 50; background: #fff; color: #111; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2vh; cursor: pointer; padding: 3vh 3vw;
+}
+#qr-vollbild[hidden] { display: none; }
+#qr-vollbild .qr-titel { font: 800 clamp(22px, 4.5vh, 54px)/1.1 -apple-system, system-ui, sans-serif; text-align: center; }
+#qr-vollbild img { width: min(78vh, 90vw); height: auto; image-rendering: pixelated; }
+#qr-vollbild .qr-url { font: 600 clamp(16px, 3vh, 34px)/1.2 ui-monospace, Menlo, monospace; }
+#qr-vollbild .qr-hinweis { font-size: clamp(12px, 1.8vh, 18px); color: #666; }
+
+/* MARK: Beamer / Präsentation */
+
+body.beamer { --seite: #0f1013; --seite-text: #eee; }
+body.beamer .leiste { background: #16171b; border-color: #26282d; color: #ddd; }
+body.beamer .leiste button { border-color: #3a3c42; }
+body.beamer #tastenspur .kappe-mini { min-width: 44px; height: 44px; font-size: 20px; border-radius: 9px; padding: 0 10px; }
+
+/* MARK: Schmal (Handy) */
+
+@media (max-width: 820px) {
+  #hilfe {
+    position: fixed; inset: 0; width: auto; z-index: 20; border-left: 0;
+    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .leiste .marke small { display: none; }
+  .leiste .breit { display: none; }
+}
+@media (max-width: 520px) {
+  .leiste .marke { display: none; }
+  .leiste { justify-content: flex-end; flex-wrap: nowrap; }
+  .leiste .sprachen { margin-right: auto; }
+}
+@media (max-width: 420px) {
+  .hilfe-kopf .reiter { padding: 8px 6px; font-size: 15px; }
+  .hilfe-kopf .schliessen { padding: 4px 6px; }
+  .leiste { gap: 5px; }
+  .leiste button { padding: 4px 8px; min-height: 34px; font-size: 15px; }
+  .sprachen button { min-width: 34px; padding: 4px 4px; }
+}
+
+@media print {
+  .leiste, #tastenspur { display: none; }
+}

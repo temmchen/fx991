@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>fx-991DE X Trainer · Tom Bleyer</title>
+  <meta name="description" content="Übungsrechner nach dem Vorbild des CASIO fx-991DE X: Lehrbuch-Eingabe, Brüche, Wurzeln, komplexe Zahlen, Gleichungen, Statistik – mit Lektionen und Tastenhilfe auf Deutsch, Englisch und Französisch.">
+  <meta name="application-name" content="fx-991 Trainer">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="fx-991 Trainer">
+  <meta name="theme-color" content="#1c1c1f">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="color-scheme" content="light dark">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="stylesheet" href="css/app.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <div id="app">
+    <header class="leiste">
+      <div class="marke">fx-991DE X Trainer <small>· Tom Bleyer</small></div>
+      <div class="sprachen" role="group" aria-label="Sprache / Language / Langue">
+        <button type="button" data-sprache="de">DE</button>
+        <button type="button" data-sprache="en">EN</button>
+        <button type="button" data-sprache="fr">FR</button>
+      </div>
+      <button type="button" id="knopf-hilfe" data-t="ui.hilfe">Hilfe</button>
+      <button type="button" id="knopf-tastenhilfe" class="breit" data-t="ui.tastenhilfe">Tastenhilfe</button>
+      <button type="button" id="knopf-beamer" class="breit" data-t="ui.beamer">Beamer</button>
+      <button type="button" id="knopf-qr" aria-label="QR-Code">QR</button>
+    </header>
+    <main>
+      <section id="rechner-bereich">
+        <div id="banner" class="banner" hidden></div>
+        <div id="geraet-rahmen"><div id="geraet"></div></div>
+        <div id="tastenspur" aria-hidden="true"></div>
+      </section>
+      <aside id="hilfe" hidden></aside>
+    </main>
+  </div>
+  <div id="qr-vollbild" hidden>
+    <div class="qr-titel">fx-991DE X Trainer</div>
+    <img src="qr-code.svg" alt="QR-Code: https://temmchen.github.io/fx991/">
+    <div class="qr-url">temmchen.github.io/fx991</div>
+    <div class="qr-hinweis" data-t="ui.qrschliessen">Klick oder Esc schließt</div>
+  </div>
+  <noscript><p style="padding:20px">Bitte JavaScript einschalten. · Please enable JavaScript.</p></noscript>
+</body>
+</html>

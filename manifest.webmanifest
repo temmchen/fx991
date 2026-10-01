@@ -1,0 +1,21 @@
+{
+  "name": "fx-991DE X Trainer · Tom Bleyer",
+  "short_name": "fx-991 Trainer",
+  "description": "Übungsrechner nach dem Vorbild des CASIO fx-991DE X – mit Lektionen und Tastenhilfe (DE/EN/FR), auch offline.",
+  "lang": "de",
+  "dir": "ltr",
+  "id": "/fx991/",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1c1c1f",
+  "theme_color": "#1c1c1f",
+  "categories": ["education", "utilities"],
+  "prefer_related_applications": false,
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
