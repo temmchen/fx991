@@ -26,6 +26,10 @@ for (const sprache of ['de', 'en', 'fr']) {
         }
         tippe(r, s.tasten);
         const text = anzeige(r);
+        if (s.art !== undefined) {
+          const art = r.ansicht().bild.art;
+          check(art === s.art, `Schritt ${j + 1}: Bildschirm „${art}“ statt „${s.art}“`);
+        }
         if (s.ergebnis !== undefined) {
           check(normText(text) === normText(s.ergebnis), `Schritt ${j + 1}: „${text}“ statt „${s.ergebnis}“`);
         } else {

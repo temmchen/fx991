@@ -337,9 +337,9 @@ export default {
       vorbereitung: STANDARD,
       einleitung: 'In the <b>9 Table</b> app you type f(x) (x with the <b>x</b> key), g(x) if you want, then Start, End and Step. Use ▲▼ to move through the table; in the x column you can overwrite values.',
       schritte: [
-        { text: 'f(x) = x² − 2x − 3 from −2 to 4: type f, =, leave g empty (=), then Start −2, End 4, Step 1 and = once more.', tasten: '[MENU]9[x][x²]−2[x]−3==[(−)]2=4=1==' },
-        { text: 'Where does f change sign? Scroll down with ▼: zeros at x = −1 and x = 3.', tasten: '[▼][▼][▼][▼][▼]' },
-        { text: 'Comparing two functions: f(x) = x², g(x) = 2x + 3. The values are equal at x = 3.', tasten: '[MENU]9[x][x²]=2[x]+3=0=4=1==' },
+        { text: 'f(x) = x² − 2x − 3 from −2 to 4: type f, =, leave g empty (=), then Start −2, End 4, Step 1 and = once more.', tasten: '[MENU]9[x][x²]−2[x]−3==[(−)]2=4=1==', kette: true, art: 'gitter' },
+        { text: 'Where does f change sign? Scroll down with ▼: zeros at x = −1 and x = 3.', tasten: '[▼][▼][▼][▼][▼]', art: 'gitter' },
+        { text: 'Comparing two functions: f(x) = x², g(x) = 2x + 3. The values are equal at x = 3.', tasten: '[MENU]9[x][x²]=2[x]+3=0=4=1==', art: 'gitter' },
       ],
       merke: 'AC takes you back to the function input. The table has at most 30 rows (with g) or 45 rows (f only).',
       aufgaben: [

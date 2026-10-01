@@ -339,9 +339,9 @@ export default {
       vorbereitung: STANDARD,
       einleitung: "Dans le mode <b>9 Tableau</b>, tu tapes f(x) (x avec la touche <b>x</b>), si tu veux aussi g(x), puis le début, la fin et le pas. Avec ▲▼, tu te déplaces dans le tableau ; dans la colonne x, tu peux remplacer des valeurs.",
       schritte: [
-        { text: "f(x) = x² − 2x − 3 de −2 à 4 : tape f, =, laisse g vide (=), puis Début −2, Fin 4, Pas 1 et encore =.", tasten: '[MENU]9[x][x²]−2[x]−3==[(−)]2=4=1==' },
-        { text: "Où f change-t-elle de signe ? Descends avec ▼ : zéros en x = −1 et x = 3.", tasten: '[▼][▼][▼][▼][▼]' },
-        { text: "Comparer deux fonctions : f(x) = x², g(x) = 2x + 3. Mêmes valeurs pour x = 3.", tasten: '[MENU]9[x][x²]=2[x]+3=0=4=1==' },
+        { text: "f(x) = x² − 2x − 3 de −2 à 4 : tape f, =, laisse g vide (=), puis Début −2, Fin 4, Pas 1 et encore =.", tasten: '[MENU]9[x][x²]−2[x]−3==[(−)]2=4=1==', kette: true, art: 'gitter' },
+        { text: "Où f change-t-elle de signe ? Descends avec ▼ : zéros en x = −1 et x = 3.", tasten: '[▼][▼][▼][▼][▼]', art: 'gitter' },
+        { text: "Comparer deux fonctions : f(x) = x², g(x) = 2x + 3. Mêmes valeurs pour x = 3.", tasten: '[MENU]9[x][x²]=2[x]+3=0=4=1==', art: 'gitter' },
       ],
       merke: "AC ramène à la saisie des fonctions. Le tableau a au maximum 30 lignes (avec g) ou 45 lignes (f seule).",
       aufgaben: [

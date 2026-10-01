@@ -337,9 +337,9 @@ export default {
       vorbereitung: STANDARD,
       einleitung: 'Im Modus <b>9 Wertetabelle</b> tippst du f(x) (x mit der Taste <b>x</b>), auf Wunsch g(x), dann Start, Ende und Schrittweite. Mit ▲▼ wanderst du durch die Tabelle; in der x-Spalte darfst du Werte überschreiben.',
       schritte: [
-        { text: 'f(x) = x² − 2x − 3 von −2 bis 4: f eintippen, =, g leer lassen (=), dann Start −2, Ende 4, Schritt 1 und nochmals =.', tasten: '[MENU]9[x][x²]−2[x]−3==[(−)]2=4=1==' },
-        { text: 'Wo wechselt f das Vorzeichen? Mit ▼ nach unten blättern: Nullstellen bei x = −1 und x = 3.', tasten: '[▼][▼][▼][▼][▼]' },
-        { text: 'Zwei Funktionen vergleichen: f(x) = x², g(x) = 2x + 3. Gleiche Werte bei x = 3.', tasten: '[MENU]9[x][x²]=2[x]+3=0=4=1==' },
+        { text: 'f(x) = x² − 2x − 3 von −2 bis 4: f eintippen, =, g leer lassen (=), dann Start −2, Ende 4, Schritt 1 und nochmals =.', tasten: '[MENU]9[x][x²]−2[x]−3==[(−)]2=4=1==', kette: true, art: 'gitter' },
+        { text: 'Wo wechselt f das Vorzeichen? Mit ▼ nach unten blättern: Nullstellen bei x = −1 und x = 3.', tasten: '[▼][▼][▼][▼][▼]', art: 'gitter' },
+        { text: 'Zwei Funktionen vergleichen: f(x) = x², g(x) = 2x + 3. Gleiche Werte bei x = 3.', tasten: '[MENU]9[x][x²]=2[x]+3=0=4=1==', art: 'gitter' },
       ],
       merke: 'AC führt zurück zur Funktionseingabe. Die Tabelle hat höchstens 30 Zeilen (mit g) bzw. 45 Zeilen (nur f).',
       aufgaben: [
