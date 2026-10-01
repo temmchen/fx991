@@ -89,10 +89,10 @@ body.split #pane-hilfe .hilfe-kopf .schliessen { display: none; }
 .hilfe-inhalt.tastenhilfe-blatt { padding: 0 0 6px; overflow: visible; }
 .tastenhilfe-blatt .tastenkarte { margin: 0; }
 
-/* MARK: Gehäuse (Entwurfsgröße 400 × 846, wird skaliert) */
+/* MARK: Gehäuse (Entwurfsgröße 400 × 880, wird skaliert) */
 
 .geraet {
-  width: 400px; height: 860px; border-radius: 34px 34px 40px 40px; position: relative;
+  width: 400px; height: 880px; border-radius: 34px 34px 40px 40px; position: relative;
   background:
     radial-gradient(120% 60% at 30% 0%, rgba(255,255,255,.07), transparent 60%),
     repeating-linear-gradient(45deg, rgba(255,255,255,.035) 0 2px, transparent 2px 5px),
@@ -102,21 +102,21 @@ body.split #pane-hilfe .hilfe-kopf .schliessen { display: none; }
   user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
   font-family: ui-rounded, "Arial Rounded MT Bold", "SF Pro Rounded", "Helvetica Neue", Arial, sans-serif;
 }
-.geraet .kopf { position: absolute; left: 30px; right: 26px; top: 26px; height: 112px; }
+.geraet .kopf { position: absolute; left: 30px; right: 26px; top: 24px; height: 96px; }
 .geraet .name {
-  position: absolute; left: 0; top: 4px; color: #e9eaec; font: 800 31px/1 "Helvetica Neue", Arial, sans-serif;
+  position: absolute; left: 0; top: 2px; color: #e9eaec; font: 800 31px/1 "Helvetica Neue", Arial, sans-serif;
   letter-spacing: .02em; text-shadow: 0 1px 0 rgba(0,0,0,.6); white-space: nowrap;
 }
-.geraet .modell { position: absolute; left: 30px; top: 50px; color: #e6e6e6; font: 500 18px/1 "Helvetica Neue", Arial, sans-serif; letter-spacing: .02em; }
-.geraet .linie { position: absolute; left: 12px; top: 80px; color: var(--rot); font: 600 21px/1 "Avenir Next Condensed", "Arial Narrow", sans-serif; letter-spacing: .32em; }
+.geraet .modell { position: absolute; left: 30px; top: 44px; color: #e6e6e6; font: 500 18px/1 "Helvetica Neue", Arial, sans-serif; letter-spacing: .02em; }
+.geraet .linie { position: absolute; left: 12px; top: 72px; color: var(--rot); font: 600 21px/1 "Avenir Next Condensed", "Arial Narrow", sans-serif; letter-spacing: .32em; }
 .geraet .solar {
-  position: absolute; right: 0; top: 2px; width: 156px; height: 58px; border-radius: 6px;
+  position: absolute; right: 0; top: 0; width: 156px; height: 56px; border-radius: 6px;
   background: linear-gradient(160deg, #3b2b24, #20140f 55%, #2c1d17); box-shadow: inset 0 0 0 2px #121212, inset 0 3px 6px rgba(0,0,0,.6);
 }
 .geraet .solar::after { content: ''; position: absolute; inset: 4px; background: repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 38px); }
 
 .lcd-rahmen {
-  position: absolute; left: 22px; right: 22px; top: 146px; height: 176px; border-radius: 14px;
+  position: absolute; left: 22px; right: 22px; top: 124px; height: 176px; border-radius: 14px;
   background: linear-gradient(#2c2d31, #1b1c1f); box-shadow: inset 0 0 0 2px #121214, 0 1px 0 rgba(255,255,255,.08);
   padding: 13px 15px 16px;
 }
@@ -132,7 +132,7 @@ body.split #pane-hilfe .hilfe-kopf .schliessen { display: none; }
 
 /* MARK: Tasten */
 
-.tasten { position: absolute; left: 24px; right: 24px; top: 346px; bottom: 26px; }
+.tasten { position: absolute; left: 24px; right: 24px; top: 322px; bottom: 20px; }
 .taste {
   position: absolute; border: 0; padding: 0; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
   display: flex; align-items: center; justify-content: center; touch-action: manipulation;
@@ -177,8 +177,8 @@ body.split #pane-hilfe .hilfe-kopf .schliessen { display: none; }
 
 /* Beschriftungen über den Tasten */
 .beschr {
-  position: absolute; display: flex; justify-content: space-between; align-items: flex-end; gap: 1px; height: 12px;
-  font: 700 10.5px/1 ui-rounded, "Arial Rounded MT Bold", "Helvetica Neue", Arial, sans-serif; white-space: nowrap; pointer-events: none;
+  position: absolute; display: flex; justify-content: space-between; align-items: flex-end; gap: 2px; height: 12px;
+  font: 700 11px/1 ui-rounded, "Arial Rounded MT Bold", "Helvetica Neue", Arial, sans-serif; white-space: nowrap; pointer-events: none;
   letter-spacing: -.01em;
 }
 .beschr .klein { font-size: 8.5px; letter-spacing: -.03em; }

@@ -42,7 +42,7 @@ const UI_MODULE = {
 };
 
 /// Casio-Gehäuse (Entwurfsgröße, tastatur.js)
-const GERAET = { breite: 400, hoehe: 860 };
+const GERAET = { breite: 400, hoehe: 880 };
 /// Querformat: Mindestbreite rechts (Arbeitsbereich) und links (Leiste mit Sprache, Tastenhilfe, Beamer, Erscheinungsbild, QR)
 const ARBEIT_MIN = 380;
 const RECHNER_MIN = 400;

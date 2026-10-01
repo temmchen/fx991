@@ -1,4 +1,4 @@
-// tastatur.js – Gehäuse und Tastenfeld in der Aufmachung des fx-991DE X (Entwurfsgröße 400 × 860 px,
+// tastatur.js – Gehäuse und Tastenfeld in der Aufmachung des fx-991DE X (Entwurfsgröße 400 × 880 px,
 // wird als Ganzes skaliert). Beschriftung über den Tasten: gelb = SHIFT, rot = ALPHA,
 // blau = Basis-N, lila = Komplex.
 
@@ -57,38 +57,40 @@ const BESCHRIFTUNG = {
   add: { kappe: '+', oben: ['<span class="s">Pol</span>'] },
   sub: { kappe: '−', oben: ['<span class="s">Rec</span>'] },
   0: { kappe: '0', oben: ['<span class="s">Rnd</span>'] },
-  dot: { kappe: '<span data-dezimal>.</span>', oben: ['<span class="s">Ran#</span>', '<span class="a">RanInt</span>'] },
+  dot: { kappe: '<span data-dezimal>.</span>', oben: ['<span class="s klein">Ran#</span>', '<span class="a klein">RanInt</span>'] },
   exp: { kappe: `×10${hk('<i>x</i>')}`, oben: ['<span class="s">π</span>', '<span class="a"><i>e</i></span>'] },
   ans: { kappe: 'Ans', oben: ['<span class="s">%</span>'] },
   eq: { kappe: '=', oben: ['<span class="s">≈</span>'] },
   up: { kappe: '▲' }, down: { kappe: '▼' }, left: { kappe: '◀' }, right: { kappe: '▶' },
 };
 
-// MARK: Lage der Tasten (relativ zum Tastenbereich, 352 × 488)
+// MARK: Lage der Tasten (relativ zum Tastenbereich, 352 × 538)
+// Funktionstasten 52 breit im Abstand 60 (8 px Lücke), Reihen alle 56 px (24 px für die Beschriftung);
+// Zifferntasten 63 breit im Abstand 72,25, Reihen alle 62 px.
 
 function lage() {
   const L = {};
   const rund = 46;
-  L.shift = { x: 8, y: 0, w: rund, h: rund, art: 'rund' };
-  L.alpha = { x: 64, y: 0, w: rund, h: rund, art: 'rund' };
-  L.menu = { x: 242, y: 0, w: rund, h: rund, art: 'rund' };
-  L.on = { x: 298, y: 0, w: rund, h: rund, art: 'rund' };
+  L.shift = { x: 6, y: 0, w: rund, h: rund, art: 'rund' };
+  L.alpha = { x: 62, y: 0, w: rund, h: rund, art: 'rund' };
+  L.menu = { x: 244, y: 0, w: rund, h: rund, art: 'rund' };
+  L.on = { x: 300, y: 0, w: rund, h: rund, art: 'rund' };
   // Steuerkreuz (Fläche 117…235 × 0…90)
   L.up = { x: 150, y: 0, w: 52, h: 30, art: 'pfeil' };
   L.down = { x: 150, y: 60, w: 52, h: 30, art: 'pfeil' };
   L.left = { x: 117, y: 24, w: 36, h: 42, art: 'pfeil' };
   L.right = { x: 199, y: 24, w: 36, h: 42, art: 'pfeil' };
-  L.optn = { x: 0, y: 64, w: 56, h: 32, art: 'funktion' };
-  L.calc = { x: 62, y: 64, w: 56, h: 32, art: 'funktion' };
-  L.int = { x: 234, y: 64, w: 56, h: 32, art: 'funktion' };
-  L.x = { x: 296, y: 64, w: 56, h: 32, art: 'funktion' };
+  L.optn = { x: 0, y: 68, w: 52, h: 32, art: 'funktion' };
+  L.calc = { x: 60, y: 68, w: 52, h: 32, art: 'funktion' };
+  L.int = { x: 240, y: 68, w: 52, h: 32, art: 'funktion' };
+  L.x = { x: 300, y: 68, w: 52, h: 32, art: 'funktion' };
   const reihen = [
     ['frac', 'sqrt', 'sq', 'pow', 'log', 'ln'],
     ['neg', 'dms', 'inv', 'sin', 'cos', 'tan'],
     ['sto', 'eng', 'lpar', 'rpar', 'sd', 'mplus'],
   ];
   reihen.forEach((reihe, j) => reihe.forEach((id, i) => {
-    L[id] = { x: i * 59.6, y: 118 + j * 50, w: 54, h: 31, art: 'funktion' };
+    L[id] = { x: i * 60, y: 126 + j * 56, w: 52, h: 32, art: 'funktion' };
   }));
   const zahlen = [
     ['7', '8', '9', 'del', 'ac'],
@@ -97,7 +99,7 @@ function lage() {
     ['0', 'dot', 'exp', 'ans', 'eq'],
   ];
   zahlen.forEach((reihe, j) => reihe.forEach((id, i) => {
-    L[id] = { x: i * 72, y: 282 + j * 56, w: 64, h: 38, art: id === 'del' || id === 'ac' ? 'blau' : 'zahl' };
+    L[id] = { x: i * 72.25, y: 311 + j * 62, w: 63, h: 41, art: id === 'del' || id === 'ac' ? 'blau' : 'zahl' };
   }));
   return L;
 }
@@ -134,8 +136,10 @@ export function baueGeraet(container, tasteGedrueckt) {
     knoepfe[id] = knopf;
     if (b.oben && b.oben.length) {
       const besch = h('div', { class: 'beschr' });
-      const breite = l.art === 'rund' ? 80 : l.w + 4;
-      const versatz = l.art === 'rund' ? 15 : 14;
+      // Beschriftung so breit wie die Taste (+2 px): zwischen den Beschriftungen benachbarter Tasten bleibt
+      // eine Lücke (sonst lesen sich z. B. „HEX“ und „10■“ als ein Wort); 4 px Luft über der Taste
+      const breite = l.art === 'rund' ? 80 : l.w + 2;
+      const versatz = 16;
       besch.style.cssText = `left:${l.x + l.w / 2 - breite / 2}px;top:${l.y - versatz}px;width:${breite}px;justify-content:${b.oben.length === 1 ? 'center' : 'space-between'}`;
       besch.innerHTML = b.oben.map((s, i) => (b.oben.length === 3 && i === 1 ? `<span class="mitte">${s}</span>` : `<span>${s}</span>`)).join('');
       tasten.append(besch);
