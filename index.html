@@ -4,50 +4,126 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>fx-991DE X Trainer · Tom Bleyer</title>
-  <meta name="description" content="Übungsrechner nach dem Vorbild des CASIO fx-991DE X: Lehrbuch-Eingabe, Brüche, Wurzeln, komplexe Zahlen, Gleichungen, Statistik – mit Lektionen und Tastenhilfe auf Deutsch, Englisch und Französisch.">
+  <meta name="description" content="Übungsrechner nach dem Vorbild des CASIO fx-991DE X mit Funktionsplotter, Kurvendiskussion, Gleichungslöser und Solver – Lektionen und Tastenhilfe auf Deutsch, Englisch und Französisch.">
   <meta name="application-name" content="fx-991 Trainer">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="fx-991 Trainer">
-  <meta name="theme-color" content="#1c1c1f">
+  <meta name="theme-color" content="#141518">
   <meta name="format-detection" content="telephone=no">
   <meta name="color-scheme" content="light dark">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="stylesheet" href="css/werkzeuge-app.css">
+  <link rel="stylesheet" href="css/werkzeuge-graph.css">
+  <link rel="stylesheet" href="css/werkzeuge-tools.css">
+  <link rel="stylesheet" href="css/werkzeuge-print.css">
   <link rel="stylesheet" href="css/app.css">
+  <style>
+    /* Meldung, falls die App nicht startet (sehr alter Browser, Ladefehler) */
+    #boot-fail {
+      position: fixed; left: 16px; right: 16px; top: calc(env(safe-area-inset-top, 0px) + 24px); z-index: 300;
+      max-width: 520px; margin: 0 auto; padding: 18px; border-radius: 14px;
+      background: #FFFFFF; color: #1B1B1A; box-shadow: 0 8px 32px rgba(0,0,0,.35);
+      font: 16px/1.4 -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    }
+    #boot-fail strong { display: block; font-size: 18px; margin-bottom: 6px; }
+    #boot-fail p { margin: 6px 0; }
+    #boot-fail .boot-detail { font: 13px/1.35 ui-monospace, Menlo, monospace; color: #74726C; word-break: break-word; }
+    #boot-fail button { margin-top: 10px; min-height: 44px; padding: 8px 18px; border: 0; border-radius: 10px; background: #1F5CC6; color: #fff; font: 600 16px -apple-system, system-ui, sans-serif; }
+  </style>
   <script type="module" src="js/app.js"></script>
 </head>
 <body>
+  <script>
+    // Erscheinungsbild und Reiter vor dem ersten Zeichnen setzen (sonst blitzt eine falsche Fläche auf)
+    (function () {
+      var tab = 'calc';
+      try {
+        var u = JSON.parse(localStorage.getItem('fx991.ui') || 'null');
+        if (u && typeof u.tab === 'string') tab = u.tab;
+        var m = /[?&]tab=([a-z]+)/.exec(location.search);
+        if (m) tab = m[1];
+      } catch (e) { /* Voreinstellung */ }
+      var dark = !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      document.body.className = 'tab-' + tab;
+    })();
+  </script>
   <div id="app">
-    <header class="leiste">
-      <div class="marke">fx-991DE X Trainer <small>· Tom Bleyer</small></div>
-      <div class="sprachen" role="group" aria-label="Sprache / Language / Langue">
-        <button type="button" data-sprache="de">DE</button>
-        <button type="button" data-sprache="en">EN</button>
-        <button type="button" data-sprache="fr">FR</button>
-      </div>
-      <button type="button" id="knopf-hilfe" data-t="ui.hilfe">Hilfe</button>
-      <button type="button" id="knopf-tastenhilfe" class="breit" data-t="ui.tastenhilfe">Tastenhilfe</button>
-      <button type="button" id="knopf-beamer" class="breit" data-t="ui.beamer">Beamer</button>
-      <button type="button" id="knopf-qr" aria-label="QR-Code">QR</button>
-    </header>
-    <main>
-      <section id="rechner-bereich">
-        <div id="banner" class="banner" hidden></div>
-        <div id="geraet-rahmen"><div id="geraet"></div></div>
-        <div id="tastenspur" aria-hidden="true"></div>
+    <main id="panes">
+      <section class="pane" id="pane-calc" data-tab="calc" aria-label="Rechner">
+        <header class="leiste">
+          <div class="marke">fx-991DE X Trainer <small>· Tom Bleyer</small></div>
+          <div class="sprachen" role="group" aria-label="Sprache / Language / Langue">
+            <button type="button" data-sprache="de">DE</button>
+            <button type="button" data-sprache="en">EN</button>
+            <button type="button" data-sprache="fr">FR</button>
+          </div>
+          <button type="button" id="knopf-tastenhilfe" data-t="ui.tastenhilfe">Tastenhilfe</button>
+          <button type="button" id="knopf-beamer" class="breit" data-t="ui.beamer">Beamer</button>
+          <button type="button" id="knopf-qr" aria-label="QR-Code">QR</button>
+        </header>
+        <div id="rechner-bereich">
+          <div id="banner" class="banner" hidden></div>
+          <div id="geraet-rahmen"><div id="geraet"></div></div>
+          <div id="tastenspur" aria-hidden="true"></div>
+        </div>
       </section>
-      <aside id="hilfe" hidden></aside>
+      <section class="pane" id="pane-graph" data-tab="graph" aria-label="Graph"></section>
+      <section class="pane" id="pane-analysis" data-tab="analysis" aria-label="Analysis"></section>
+      <section class="pane" id="pane-equations" data-tab="equations" aria-label="Gleichungen"></section>
+      <section class="pane" id="pane-solver" data-tab="solver" aria-label="Solver"></section>
+      <section class="pane" id="pane-hilfe" data-tab="hilfe" aria-label="Hilfe"></section>
+      <section class="pane sub" id="pane-print" data-tab="print" data-parent="hilfe" aria-label="Ausdruck / PDF"></section>
     </main>
+    <nav id="tabbar" aria-label="Bereiche">
+      <button type="button" data-tab="calc"><span>Rechner</span></button>
+      <button type="button" data-tab="graph"><span>Graph</span></button>
+      <button type="button" data-tab="analysis"><span>Analysis</span></button>
+      <button type="button" data-tab="equations"><span>Gleichungen</span></button>
+      <button type="button" data-tab="solver"><span>Solver</span></button>
+      <button type="button" data-tab="hilfe"><span>Hilfe</span></button>
+    </nav>
   </div>
+  <div id="print-root" aria-hidden="true"></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <div id="mathbar" hidden></div>
   <div id="qr-vollbild" hidden>
     <div class="qr-titel">fx-991DE X Trainer</div>
     <img src="qr-code.svg" alt="QR-Code: https://temmchen.github.io/fx991/">
     <div class="qr-url">temmchen.github.io/fx991</div>
     <div class="qr-hinweis" data-t="ui.qrschliessen">Klick oder Esc schließt</div>
   </div>
-  <noscript><p style="padding:20px">Bitte JavaScript einschalten. · Please enable JavaScript.</p></noscript>
+  <noscript><p style="position:fixed;left:16px;right:16px;top:40px;padding:16px;border-radius:12px;background:#fff;color:#1B1B1A">Bitte JavaScript einschalten. · Please enable JavaScript.</p></noscript>
+  <script>
+    // Startet app.js nicht (sehr alter Browser, Ladefehler): nach einigen Sekunden eine verständliche Meldung
+    (function () {
+      var firstError = '';
+      window.addEventListener('error', function (e) { if (!firstError && e && e.message) firstError = e.message; });
+      var waited = false, domReady = false;
+      document.addEventListener('DOMContentLoaded', function () { domReady = true; });
+      setTimeout(function check() {
+        if (window.__fx991Started || document.getElementById('boot-fail')) return;
+        if ((window.__fx991Booting || !domReady) && !waited) { waited = true; setTimeout(check, 12000); return; }
+        var box = document.createElement('div');
+        box.id = 'boot-fail';
+        box.setAttribute('role', 'alert');
+        var t = document.createElement('strong');
+        t.textContent = 'Der fx-991 Trainer startet nicht.';
+        var p = document.createElement('p');
+        p.textContent = 'Bitte die Seite neu laden. Hilft das nicht: Browser (Safari, Chrome, Firefox) aktualisieren.';
+        box.appendChild(t); box.appendChild(p);
+        if (firstError) { var d = document.createElement('p'); d.className = 'boot-detail'; d.textContent = firstError; box.appendChild(d); }
+        var b = document.createElement('button');
+        b.type = 'button'; b.textContent = 'Neu laden';
+        b.onclick = function () { location.reload(); };
+        box.appendChild(b);
+        document.body.appendChild(box);
+      }, 4000);
+    })();
+  </script>
 </body>
 </html>

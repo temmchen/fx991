@@ -1,4 +1,4 @@
-// inhalt.js – Hilfe-Inhalte in drei Sprachen (Lektionen, Tastenhilfe, Tipps, Über, Oberflächentexte).
+// inhalt.js – Hilfe-Inhalte in drei Sprachen (Lektionen, Tastenhilfe, Werkzeuge, Tipps, Über, Oberflächentexte).
 // Fehlt etwas in einer Sprache, wird Deutsch verwendet.
 
 import de from './inhalt/de.js';
@@ -14,6 +14,7 @@ export function inhalt(s) {
     lektionen: d.lektionen && d.lektionen.length ? d.lektionen : de.lektionen,
     tasten: { ...de.tasten, ...(d.tasten || {}) },
     tipps: d.tipps && d.tipps.length ? d.tipps : de.tipps,
+    werkzeuge: d.werkzeuge || de.werkzeuge,
     ueber: d.ueber || de.ueber,
   };
 }

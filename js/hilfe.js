@@ -1,4 +1,5 @@
-// hilfe.js – Hilfe-Panel: Lektionen mit Vorführen/Üben/Prüfen, Tastenhilfe, Tipps, Über.
+// hilfe.js – Hilfe-Reiter: Lektionen mit Vorführen/Üben/Prüfen, Tastenhilfe, Werkzeuge (Graph & Co.),
+// Tipps, Über.
 // Inhalte (dreisprachig) kommen aus inhalt.js; Tastenfolgen im Format von tasten.js („[SHIFT][sin]0.5=“).
 
 import { h, formel } from './anzeige.js';
@@ -7,6 +8,7 @@ import { miniKappe, LAGE } from './tastatur.js';
 import { inhalt, uiText } from './inhalt.js';
 import { alsText } from './format.js';
 import * as Z from './zahl.js';
+import * as GR from './inhalt/griechisch.js';
 
 const FORTSCHRITT = 'fx991.fortschritt';
 
@@ -38,7 +40,7 @@ export function tastenReihe(folge) {
 }
 
 export class Hilfe {
-  constructor(box, { rechner, spiele, sprache, schliessen, zeichne, vorVorfuehrung }) {
+  constructor(box, { rechner, spiele, sprache, schliessen, zeichne, vorVorfuehrung, werkzeuge }) {
     this.box = box;
     this.r = rechner;
     this.spiele = spiele;
@@ -46,6 +48,8 @@ export class Hilfe {
     this.schliessen = schliessen;
     this.zeichne = zeichne;
     this.vorVorfuehrung = vorVorfuehrung || (() => {});
+    // Reiter-Werkzeuge der App (app.js): { oeffne(tab), beispiel(texte), drucken(), zuruecksetzen() }
+    this.werkzeuge = werkzeuge || null;
     this.reiter = 'lektionen';
     this.lektion = null;  // Index der offenen Lektion
     this.fortschritt = ladeFortschritt();
@@ -68,8 +72,13 @@ export class Hilfe {
 
   baue() {
     const kopf = h('div', { class: 'hilfe-kopf' });
-    for (const [id, k] of [['lektionen', 'ui.lektionen'], ['tasten', 'ui.tasten'], ['tipps', 'ui.tipps'], ['ueber', 'ui.ueber']]) {
+    const reiter = [['lektionen', 'ui.lektionen'], ['tasten', 'ui.tasten']];
+    if (this.werkzeuge) reiter.push(['werkzeuge', 'ui.werkzeuge']);
+    reiter.push(['griechisch', 'ui.griechisch'], ['tipps', 'ui.tipps'], ['ueber', 'ui.ueber']);
+    if (!reiter.some(([id]) => id === this.reiter)) this.reiter = 'lektionen';
+    for (const [id, k] of reiter) {
       const b = h('button', { type: 'button', class: 'reiter' + (this.reiter === id ? ' an' : '') }, this.t(k));
+      if (id === 'griechisch') { b.title = this.t('ui.griechischTitel'); b.setAttribute('aria-label', this.t('ui.griechischTitel')); }
       b.addEventListener('click', () => { this.reiter = id; if (id === 'lektionen') this.lektion = null; this.baue(); });
       kopf.append(b);
     }
@@ -81,6 +90,8 @@ export class Hilfe {
     if (this.reiter === 'lektionen') {
       if (this.lektion === null) this.lektionsListe(); else this.zeigeLektion(this.lektion);
     } else if (this.reiter === 'tasten') this.tastenSeite();
+    else if (this.reiter === 'werkzeuge') this.werkzeugSeite();
+    else if (this.reiter === 'griechisch') this.griechischSeite();
     else if (this.reiter === 'tipps') this.tippsSeite();
     else this.ueberSeite();
   }
@@ -278,6 +289,13 @@ export class Hilfe {
       this.reiter = 'tasten';
       this.baue();
     }
+    const k = this.tastenKarte(id, mod);
+    this.karte.replaceChildren(k);
+    k.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
+  /// Erklärung einer Taste als Karte (Reiter „Tasten“ oder Blatt über dem Rechner)
+  tastenKarte(id, mod) {
     const info = (this.daten.tasten || {})[id] || {};
     const k = h('div', { class: 'tastenkarte' });
     const kopf = h('div', { class: 'tk-kopf' }, miniKappe(id), h('strong', null, info.name || TASTEN[id]?.haupt || id));
@@ -299,8 +317,163 @@ export class Hilfe {
       const hinweis = h('p', { class: 'gedaempft' }, (mod === 'shift' ? 'SHIFT' : 'ALPHA') + ' → ' + (mod === 'shift' ? (TASTEN[id]?.shift || '—') : (TASTEN[id]?.alpha || '—')));
       k.prepend(hinweis);
     }
-    this.karte.replaceChildren(k);
-    k.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    return k;
+  }
+
+  // MARK: Werkzeuge (Graph, Analysis, Gleichungen, Solver aus RPN42)
+
+  werkzeugSeite() {
+    const c = this.inhalt;
+    const w = this.daten.werkzeuge;
+    if (!w || !this.werkzeuge) return;
+    c.append(h('h2', null, w.titel), absatz(w.intro));
+    for (const a of w.abschnitte) {
+      const box = h('div', { class: 'schritt werkzeug' });
+      box.append(h('strong', null, a.titel), absatz(a.text, 'div'));
+      if (a.tasten) box.append(tastenReihe(a.tasten));
+      const akt = h('div', { class: 'aktionen' });
+      if (a.tasten) {
+        const vor = h('button', { type: 'button', class: 'knopf haupt klein' }, '▶ ' + this.t('ui.vorfuehren'));
+        vor.addEventListener('click', async () => {
+          this.vorVorfuehrung();
+          for (const id of tastenfolge(a.vorbereitung || '[ON]')) this.r.taste(id);
+          this.zeichne();
+          await this.spiele(tastenfolge(a.tasten));
+        });
+        akt.append(vor);
+      }
+      if (a.beispiel) {
+        const b = h('button', { type: 'button', class: 'knopf klein' }, w.beispielKnopf);
+        b.addEventListener('click', () => this.werkzeuge.beispiel(a.beispiel));
+        akt.append(b);
+      }
+      if (a.tab) {
+        const b = h('button', { type: 'button', class: 'knopf klein' }, a.knopf + ' ▶');
+        b.addEventListener('click', () => this.werkzeuge.oeffne(a.tab));
+        akt.append(b);
+      }
+      if (a.aktion === 'drucken' || a.aktion === 'zuruecksetzen') {
+        const b = h('button', { type: 'button', class: 'knopf klein' + (a.aktion === 'drucken' ? ' haupt' : '') }, a.knopf);
+        b.addEventListener('click', () => (a.aktion === 'drucken' ? this.werkzeuge.drucken() : this.werkzeuge.zuruecksetzen()));
+        akt.append(b);
+      }
+      if (akt.childElementCount) box.append(akt);
+      c.append(box);
+    }
+  }
+
+  // MARK: Griechisches Alphabet (nach Toms Skript; Daten in inhalt/griechisch.js)
+
+  griechischSeite() {
+    const c = this.inhalt;
+    const s = this.sprache;
+    const tx = GR.TEXTE[s] || GR.TEXTE.de;
+    const text = (v) => (v && typeof v === 'object' ? (v[s] || v.de) : (v || ''));
+    // Zahlen mit dem Dezimalzeichen des Rechners, ×10^n hochgestellt
+    const dez = (v) => {
+      const t0 = this.r.einst.dezimal === ',' ? String(v).replace(/(\d)\.(\d)/g, '$1,$2') : String(v);
+      return t0.replace(/×10\^(-?\d+)/g, (m, e) => `×10<sup>${e.replace('-', '−')}</sup>`);
+    };
+    const html = (tag, klasse, inhalt) => {
+      const x = h(tag, klasse ? { class: klasse } : null);
+      x.innerHTML = dez(inhalt);
+      return x;
+    };
+
+    c.append(h('h2', null, tx.titel), absatz(tx.intro));
+
+    // Alphabet: groß, klein, Variante, Name
+    c.append(h('h3', null, tx.alphabet));
+    const raster = h('div', { class: 'gk-raster' });
+    for (const b of GR.ALPHABET) {
+      raster.append(h('div', { class: 'gk-karte' },
+        h('div', { class: 'gk-zeichen', lang: 'el' }, b.gross, h('span', { class: 'gk-klein' }, b.klein),
+          b.variante ? h('span', { class: 'gk-variante' }, b.variante) : null),
+        this.gkName(text(b.name))));
+    }
+    c.append(raster, h('p', { class: 'gedaempft' }, tx.legende));
+
+    // Lernkarte
+    c.append(h('h3', null, tx.lernkarte));
+    const karte = h('div', { class: 'gk-lernkarte' });
+    c.append(karte);
+    this.lernkarte(karte, tx);
+
+    // Verwendung in Elektrotechnik, Physik/Mechanik, Mathematik
+    const zeile = (zeichenHtml, name, bedeutung, unten) => {
+      const symbol = h('div', { class: 'gk-symbol' });
+      const lang = zeichenHtml.replace(/<[^>]+>/g, '').length > 3;   // „α, β, γ“
+      symbol.append(html('span', 'gk-gross' + (lang ? ' gk-mehrere' : ''), zeichenHtml), h('span', { class: 'gk-buchstabe' }, name));
+      return h('div', { class: 'gk-zeile' }, symbol, h('div', null, html('div', 'gk-bedeutung', bedeutung), ...unten));
+    };
+    for (const [liste, titel] of [[GR.ETECHNIK, tx.etechnik], [GR.PHYSIK, tx.physik], [GR.MATHE, tx.mathe]]) {
+      c.append(h('h3', null, titel));
+      const box = h('div', { class: 'gk-liste' });
+      for (const x of liste) {
+        const name = x.zeichen.split(', ').map((z) => GR.buchstabenName(z, s)).join(', ');
+        const teile = [];
+        if (x.formel) teile.push(`<span class="gk-f">${text(x.formel)}</span>`);
+        if (x.einheit) teile.push(`[${x.zeichen}] = ${x.einheit}`);
+        box.append(zeile(x.zeichen, name, text(x.bedeutung), teile.length ? [html('div', 'gk-formel', teile.join('<span class="gk-trenner">·</span>'))] : []));
+      }
+      c.append(box);
+    }
+
+    // Konstanten und Kennwerte, mit Vorführung am Rechner
+    c.append(h('h3', null, tx.konstanten), absatz(tx.konstantenIntro));
+    const box = h('div', { class: 'gk-liste' });
+    for (const x of GR.KONSTANTEN) {
+      const unten = [];
+      if (x.wert) unten.push(html('div', 'gk-wert', x.wert + (x.einheit ? ` ${x.einheit}` : '')));
+      if (x.tasten) {
+        const akt = h('div', { class: 'gk-casio' }, tastenReihe(x.tasten));
+        const vor = h('button', { type: 'button', class: 'knopf haupt klein', 'aria-label': this.t('ui.vorfuehren') }, '▶');
+        vor.addEventListener('click', async () => {
+          this.vorVorfuehrung();
+          for (const id of tastenfolge(GR.STANDARD)) this.r.taste(id);
+          this.zeichne();
+          await this.spiele(tastenfolge(x.tasten));
+        });
+        akt.append(vor);
+        unten.push(akt);
+      }
+      box.append(zeile(x.zeichen, GR.buchstabenName(x.zeichen, s), text(x.bedeutung), unten));
+    }
+    c.append(box);
+
+    const achtung = h('div', { class: 'hinweisbox falle' });
+    achtung.innerHTML = `<strong>${this.t('ui.falle')}</strong> ${tx.achtung}`;
+    const merke = h('div', { class: 'hinweisbox' });
+    merke.innerHTML = `<strong>${this.t('ui.merke')}</strong> ${tx.zusammenfassung}`;
+    c.append(achtung, merke, h('p', { class: 'gedaempft' }, tx.quelle));
+  }
+
+  /// Name eines Buchstabens; ein Aussprachehinweis in Klammern („My (gesprochen „mü“)“) klein darunter
+  gkName(name) {
+    const m = /^(.*?) \((.*)\)$/.exec(name);
+    return h('div', { class: 'gk-name' }, m ? m[1] : name, m ? h('span', { class: 'gk-aussprache' }, m[2]) : null);
+  }
+
+  /// Lernkarte: zufälliger Buchstabe (meist klein), Name auf Tipp
+  lernkarte(box, tx) {
+    const A = GR.ALPHABET;
+    const q = this.karteZustand || (this.karteZustand = { i: Math.floor(Math.random() * A.length), gross: false, offen: false });
+    const b = A[q.i];
+    const aufdecken = () => { q.offen = true; this.lernkarte(box, tx); };
+    const zeichen = h('button', { type: 'button', class: 'gk-lk-zeichen', lang: 'el', 'aria-label': tx.zeigen }, q.gross ? b.gross : b.klein);
+    zeichen.addEventListener('click', aufdecken);
+    const name = h('div', { class: 'gk-lk-name' + (q.offen ? '' : ' verdeckt') }, q.offen ? (b.name[this.sprache] || b.name.de) : '?');
+    const zeigen = h('button', { type: 'button', class: 'knopf klein' }, tx.zeigen);
+    zeigen.addEventListener('click', aufdecken);
+    if (q.offen) zeigen.disabled = true;
+    const weiter = h('button', { type: 'button', class: 'knopf haupt klein' }, tx.weiter + ' ▶');
+    weiter.addEventListener('click', () => {
+      let i = q.i;
+      while (i === q.i) i = Math.floor(Math.random() * A.length);
+      Object.assign(q, { i, gross: Math.random() < 0.3, offen: false });
+      this.lernkarte(box, tx);
+    });
+    box.replaceChildren(zeichen, name, h('div', { class: 'aktionen' }, zeigen, weiter));
   }
 
   // MARK: Tipps und Über

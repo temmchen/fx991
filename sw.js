@@ -5,7 +5,7 @@
 // Nachricht aus app.js) und lädt beim nächsten Anzeigen neu. Alte Zwischenspeicher werden gelöscht.
 // Auf temmchen.github.io teilen sich mehrere Apps den Ursprung: nur Zwischenspeicher mit „fx991-“ anfassen
 // und nur Anfragen innerhalb des eigenen Bereichs (scope) beantworten.
-const VERSION = '1.0.2';
+const VERSION = '1.1.0';
 const PREFIX = 'fx991-';
 const CACHE = PREFIX + VERSION;
 
@@ -16,6 +16,10 @@ const FILES = [
   'manifest.webmanifest',
   'qr-code.svg',
   'css/app.css',
+  'css/werkzeuge-app.css',
+  'css/werkzeuge-graph.css',
+  'css/werkzeuge-print.css',
+  'css/werkzeuge-tools.css',
   'js/app.js',
   'js/anzeige.js',
   'js/auswertung.js',
@@ -30,6 +34,7 @@ const FILES = [
   'js/inhalt/de.js',
   'js/inhalt/en.js',
   'js/inhalt/fr.js',
+  'js/inhalt/griechisch.js',
   'js/komplex.js',
   'js/konstanten.js',
   'js/matrix.js',
@@ -41,6 +46,26 @@ const FILES = [
   'js/tasten.js',
   'js/verteilung.js',
   'js/zahl.js',
+  'js/zeichnen.js',
+  'js/werkzeuge/analysis.js',
+  'js/werkzeuge/calculator.js',
+  'js/werkzeuge/complex.js',
+  'js/werkzeuge/constants.js',
+  'js/werkzeuge/eqmodel.js',
+  'js/werkzeuge/equations.js',
+  'js/werkzeuge/expression.js',
+  'js/werkzeuge/fmt.js',
+  'js/werkzeuge/graph.js',
+  'js/werkzeuge/hpformat.js',
+  'js/werkzeuge/numerics.js',
+  'js/werkzeuge/rational.js',
+  'js/werkzeuge/solver.js',
+  'js/werkzeuge/symbolic.js',
+  'js/werkzeuge/ui/common.js',
+  'js/werkzeuge/ui/graph-render.js',
+  'js/werkzeuge/ui/graph-ui.js',
+  'js/werkzeuge/ui/print-ui.js',
+  'js/werkzeuge/ui/tools-ui.js',
   'icons/apple-touch-icon.png',
   'icons/favicon-32.png',
   'icons/icon-192.png',

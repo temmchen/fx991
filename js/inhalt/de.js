@@ -39,6 +39,30 @@ export default {
     weitere: 'Hinweis',
     tastenhilfeBanner: 'Tastenhilfe: Taste antippen → Erklärung',
     tippsTitel: 'Tipps & Tricks',
+    tabRechner: 'Rechner',
+    tabGraph: 'Graph',
+    tabAnalysis: 'Analysis',
+    tabGleichungen: 'Gleichungen',
+    tabSolver: 'Solver',
+    tabHilfe: 'Hilfe',
+    werkzeuge: 'Werkzeuge',
+    griechisch: 'αβγ',
+    griechischTitel: 'Griechisches Alphabet',
+    inAns: 'In Ans übernommen',
+    inXY: 'In x und y übernommen',
+    inVariablen: 'In den Rechner übernommen',
+    keinWert: 'Kein gültiger Zahlenwert',
+    werkzeugeLaden: 'Die Werkzeuge werden noch geladen …',
+    werkzeugeFehlen: 'Die Werkzeuge (Graph, Analysis …) konnten nicht geladen werden. Der Rechner funktioniert weiter.',
+    neuLaden: 'Neu laden',
+    speichernNicht: 'Sichern nicht möglich (Speicher voll oder gesperrt)',
+    graphGrad: 'Graph: Winkel in Grad (wie der Rechner)',
+    graphBogen: 'Graph: Winkel im Bogenmaß (wie der Rechner)',
+    zuruecksetzenTitel: 'Werkzeuge zurücksetzen',
+    zuruecksetzenFrage: 'Graph leeren und Analysis, Gleichungen und Solver-Werte zurücksetzen? Der Rechner bleibt, wie er ist.',
+    zuruecksetzenOk: 'Zurücksetzen',
+    zurueckgesetzt: 'Werkzeuge zurückgesetzt',
+    neueVersion: 'Neue Version geladen – wird beim nächsten Öffnen aktiv',
   },
 
   lektionen: [
@@ -497,9 +521,66 @@ export default {
     { titel: 'Als App installieren', text: 'iPhone/iPad: in Safari Teilen → „Zum Home-Bildschirm“. Android: Menü → „App installieren“. Danach funktioniert der Übungsrechner auch offline.' },
   ],
 
+  // MARK: Werkzeuge (Graph, Analysis, Gleichungen, Solver aus RPN42) – Hilfe-Reiter „Werkzeuge“
+  werkzeuge: {
+    titel: 'Graph & Werkzeuge',
+    intro: 'Unten in der Leiste findest du neben dem Rechner Werkzeuge wie bei einem Grafikrechner: <b>Graph</b>, <b>Analysis</b>, <b>Gleichungen</b> und <b>Solver</b>. Damit zeichnest du Funktionen, findest Nullstellen, Extrema und Schnittpunkte, löst Gleichungen und Gleichungssysteme und stellst Formeln nach jeder Größe um. In der Prüfung hast du nur den fx-991DE X – die Werkzeuge helfen dir, Ergebnisse zu verstehen und zu kontrollieren.',
+    beispielKnopf: 'Beispiel zeichnen',
+    abschnitte: [
+      {
+        titel: 'Vom Rechner in den Graphen: SHIFT OPTN',
+        text: 'Tippe einen Term mit <b>x</b> ein und drücke <b>SHIFT OPTN</b> – der Term wird im Graphen gezeichnet. Das geht auch in der <b>Wertetabelle</b> (f und g im Bereich der Tabelle), bei <b>Gleichungen</b> (das Polynom bzw. die beiden Geraden eines 2×2-Systems), bei <b>Ungleichungen</b> und in der <b>Statistik</b> (Messpunkte mit Regressionskurve). Beim echten Rechner zeigt SHIFT OPTN einen QR-Code, mit dem man den Graphen auf dem Handy sieht – hier wird direkt gezeichnet.',
+        tasten: '[x][x²]−2[x]−3[SHIFT][OPTN]',
+        vorbereitung: STANDARD,
+      },
+      {
+        titel: 'Graph',
+        text: 'Funktionen eintippen wie <code>f(x) = x^2 - 2x - 3</code> oder <code>g(x) = 2x + 1</code>. Mit zwei Fingern (am Computer mit dem Mausrad) zoomen, mit einem Finger verschieben. Der Graph zeigt Nullstellen, Hoch-, Tief- und Wendepunkte und Schnittpunkte. Tippe einen Punkt an: <b>x → Rechner</b> bzw. <b>y → Rechner</b> übernimmt den Wert als Ans, dazu Tangente und Normale. Winkel in Grad stellst du in den Einstellungen des Graphen ein.',
+        beispiel: ['f(x) = x^2 - 2x - 3', 'g(x) = 2x + 1'],
+        tab: 'graph',
+        knopf: 'Graph öffnen',
+      },
+      {
+        titel: 'Analysis',
+        text: 'Ableitungen f′, f″ und f‴ als Formel und ihre Werte an einer Stelle, Tangente und Normale, Stammfunktion, bestimmtes Integral und Flächeninhalt (auch zwischen zwei Graphen) – dazu für die Elektrotechnik Mittelwert, Gleichrichtwert, Effektivwert, Form- und Scheitelfaktor.',
+        tab: 'analysis',
+        knopf: 'Analysis öffnen',
+      },
+      {
+        titel: 'Gleichungen',
+        text: 'Lineare Gleichungssysteme mit 2 bis 8 Unbekannten (mit Lösungsweg), quadratische und kubische Gleichungen, Polynome bis zum Grad 10 und beliebige Gleichungen wie <code>2^x = 10</code> (Lösungen in einem Intervall, das du wählst). <b>Alle Werte in den Rechner</b> legt die Lösungen in die Variablen A, B, C … des Rechners.',
+        tab: 'equations',
+        knopf: 'Gleichungen öffnen',
+      },
+      {
+        titel: 'Solver',
+        text: 'Formeln wie <code>U = R*I</code> oder <code>X_C = 1/(2*π*f*C)</code> nach jeder Größe auflösen: bekannte Werte eintragen, bei der gesuchten Größe <b>Lösen</b> tippen. Eigene Formeln legst du mit <b>+</b> an. Winkel (z. B. cos φ) gelten im Winkelmaß des Rechners (D oder R oben im Display).',
+        tab: 'solver',
+        knopf: 'Solver öffnen',
+      },
+      {
+        titel: 'Werte in den Rechner',
+        text: 'Ein Wert aus den Werkzeugen (Knopf <b>→ Ans</b>) landet im Rechner als <b>Ans</b> – weiterrechnen zum Beispiel mit <b>×2=</b>. Ein Punkt aus dem Graphen kommt in die Variablen <b>x</b> und <b>y</b>, mehrere Lösungen auf einmal in <b>A, B, C …</b>; abrufen mit ALPHA und der Variablentaste.',
+      },
+      {
+        titel: 'Ausdruck / PDF',
+        text: 'Graph mit Funktionen, Merkmalen, Analysis, Gleichungen und Solver-Werten als A4-Blatt drucken oder als PDF sichern – auf Wunsch im Maßstab 1 LE = 1 cm auf Karopapier. Am iPhone: Drucken → Teilen → „In Dateien sichern“.',
+        aktion: 'drucken',
+        knopf: 'Ausdruck / PDF',
+      },
+      {
+        titel: 'Neu anfangen',
+        text: 'Leert den Graphen und setzt Analysis, Gleichungen und die Werte des Solvers zurück. Eigene Solver-Formeln und der Rechner bleiben (den Rechner setzt du mit SHIFT 9 zurück).',
+        aktion: 'zuruecksetzen',
+        knopf: 'Werkzeuge zurücksetzen',
+      },
+    ],
+  },
+
   ueber: `<h2>fx-991DE X Trainer</h2>
 <p>Übungsrechner für den Unterricht nach dem Vorbild des wissenschaftlichen Taschenrechners <b>CASIO fx-991DE X</b> (ClassWiz): gleiche Tastenbelegung, Lehrbuch-Eingabe und exakte Ergebnisse – damit du die Bedienung deines Rechners auch am Handy oder am Beamer üben kannst.</p>
 <p>Enthalten: Berechnungen, Komplexe Zahlen, Basis-N, Matrizen, Vektoren, Statistik, Verteilungen, Wertetabelle, Gleichungen, Ungleichungen, Berechnungen prüfen und Verhältnisse. Nicht enthalten: Tabellenkalkulation.</p>
+<p>Dazu die Werkzeuge <b>Graph</b>, <b>Analysis</b>, <b>Gleichungen</b>, <b>Solver</b> und <b>Ausdruck/PDF</b> aus der Web-App <a href="https://temmchen.github.io/rpn42/">RPN42</a> – SHIFT OPTN zeichnet direkt vom Rechner aus.</p>
 <p class="gedaempft">Ein Lernprojekt von <b>Tom Bleyer</b> (LTEtt, Elektrotechnik). Kein Produkt von CASIO. CASIO, ClassWiz und fx-991 sind Marken der CASIO Computer Co., Ltd. Ergebnisse können in Einzelfällen von der Anzeige des echten Rechners abweichen.</p>
 <p class="gedaempft">Quelltext (MIT-Lizenz): <a href="https://github.com/temmchen/fx991">github.com/temmchen/fx991</a></p>`,
 };

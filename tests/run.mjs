@@ -5,6 +5,9 @@ const files = [
   './kern.test.mjs',      // zahl, format, parser, auswertung
   './rechner.test.mjs',   // Tastenfolgen am ganzen Rechner
   './lektionen.test.mjs', // alle Tastenfolgen der Hilfe/Lektionen
+  './zeichnen.test.mjs',  // Brücke Casio → Graph (Werkzeuge aus RPN42)
+  './werkzeuge.test.mjs', // Hilfe „Werkzeuge“, Reitertexte, Werkzeug-Module
+  './griechisch.test.mjs', // Hilfe „αβγ“: Alphabet, Fachgebiete, Konstanten am Rechner
 ];
 
 for (const f of files) {

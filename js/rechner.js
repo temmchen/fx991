@@ -16,6 +16,7 @@ import { eingabeFuer, variableAus, HEX_TASTE } from './tasten.js';
 import { Menue, inSeiten, Hauptmenue, Frage, Hinweis, FehlerSchirm, fehlerArt, QRSchirm, Werteingabe } from './bildschirme.js';
 import { Statistik, STAT_NAMEN } from './statistik.js';
 import { newton } from './gleichungen.js';
+import { funktionstext, enthaeltX, regressionText } from './zeichnen.js';
 import * as Modi from './modi.js';
 
 const { Q, NULL } = Z;
@@ -45,6 +46,7 @@ export class Rechner {
     this.setzeModus('COMP');
     this.beiAenderung = null; // Rückruf zum Sichern (app.js)
     this.beiTaste = null;     // Rückruf für Lektionen (Taste, Rechner)
+    this.zeichnen = null;     // (texte, { grad, punkte, bereich }) → Graph (app.js); ohne: SHIFT OPTN zeigt den QR-Code
   }
 
   allesLoeschen() {
@@ -156,6 +158,31 @@ export class Rechner {
     this.push(new FehlerSchirm(fehlerArt(e), zurueck));
   }
 
+  /// SHIFT OPTN: Funktionen zeichnen (Graph der Web-App) – sonst wie beim Rechner den QR-Code zeigen
+  zeichneOderQR(texte, optionen = {}) {
+    if (this.zeichnen && texte && texte.length) {
+      this.zeichnen(texte, { grad: this.einst.winkel === 'D', ...optionen });
+      return true;
+    }
+    this.push(new QRSchirm());
+    return false;
+  }
+
+  /// Statistikdaten (zwei Variablen) als Punkte samt Regressionskurve zeichnen
+  zeichneStatistik() {
+    if (!this.zeichnen || !this.stat.zweiVar) return false;
+    const zeilen = this.stat.zeilen();
+    if (zeilen.length === 0) return false;
+    const punkte = zeilen.map((z) => [Z.zahl(z.x), Z.zahl(z.y)]);
+    const texte = [];
+    try {
+      const t = regressionText(this.stat.typ, this.stat.kennwerte());
+      if (t) texte.push(`r(x) = ${t}`);
+    } catch (e) { /* nur Punkte */ }
+    this.zeichnen(texte, { punkte, grad: false });
+    return true;
+  }
+
   // MARK: Ansicht
 
   ansicht() {
@@ -254,7 +281,7 @@ export class RechenSchirm {
     switch (k) {
       case 'menu': case 'S:menu': r.globaleTaste(k); return;
       case 'optn': r.push(optnMenue(r, this)); return;
-      case 'S:optn': r.push(new QRSchirm()); return;
+      case 'S:optn': this.zeichnenOderQR(r); return;
       case 'S:7': if (r.modus !== 'BASE') r.push(constMenue(r, this)); return;
       case 'S:8': if (r.modus !== 'BASE') r.push(convMenue(r, this)); return;
       case 'S:9': r.push(resetMenue(r)); return;
@@ -417,6 +444,25 @@ export class RechenSchirm {
     this.letzteZeile = eintrag.zeile;
     this.anhang = eintrag.anhang || null;
     this.mehrfach = null;
+  }
+
+  /// SHIFT OPTN: Term mit x zeichnen (Berechnungen), Statistikdaten zeichnen, sonst QR-Code
+  zeichnenOderQR(r) {
+    if (r.zeichnen) {
+      if (r.modus === 'COMP' || r.modus === 'VERIFY') {
+        const zeile = this.zustand === 'eingabe' && !this.eingabe.istLeer() ? this.eingabe.wurzel : this.letzteZeile;
+        if (zeile && enthaeltX(zeile)) {
+          try {
+            r.zeichneOderQR([`f(x) = ${funktionstext(zeile, r)}`]);
+          } catch (e) {
+            r.zeigeFehler(e, () => {});
+          }
+          return;
+        }
+      }
+      if (r.modus === 'STAT' && r.zeichneStatistik()) return;
+    }
+    r.push(new QRSchirm());
   }
 
   // MARK: Rechnen

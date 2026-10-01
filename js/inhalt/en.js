@@ -39,6 +39,30 @@ export default {
     weitere: 'Note',
     tastenhilfeBanner: 'Key help: tap a key → explanation',
     tippsTitel: 'Tips & tricks',
+    tabRechner: 'Calculator',
+    tabGraph: 'Graph',
+    tabAnalysis: 'Analysis',
+    tabGleichungen: 'Equations',
+    tabSolver: 'Solver',
+    tabHilfe: 'Help',
+    werkzeuge: 'Tools',
+    griechisch: 'αβγ',
+    griechischTitel: 'Greek alphabet',
+    inAns: 'Stored in Ans',
+    inXY: 'Stored in x and y',
+    inVariablen: 'Stored in the calculator',
+    keinWert: 'Not a valid number',
+    werkzeugeLaden: 'The tools are still loading …',
+    werkzeugeFehlen: 'The tools (Graph, Analysis …) could not be loaded. The calculator still works.',
+    neuLaden: 'Reload',
+    speichernNicht: 'Cannot save (storage full or blocked)',
+    graphGrad: 'Graph: angles in degrees (like the calculator)',
+    graphBogen: 'Graph: angles in radians (like the calculator)',
+    zuruecksetzenTitel: 'Reset tools',
+    zuruecksetzenFrage: 'Clear the graph and reset Analysis, Equations and the Solver values? The calculator stays as it is.',
+    zuruecksetzenOk: 'Reset',
+    zurueckgesetzt: 'Tools reset',
+    neueVersion: 'New version loaded – active the next time you open the app',
   },
 
   lektionen: [
@@ -497,9 +521,66 @@ export default {
     { titel: 'Install as an app', text: 'iPhone/iPad: in Safari, Share → “Add to Home Screen”. Android: menu → “Install app”. After that, the trainer also works offline.' },
   ],
 
+  // MARK: Tools (Graph, Analysis, Equations, Solver from RPN42) – help tab “Tools”
+  werkzeuge: {
+    titel: 'Graph & tools',
+    intro: 'Next to the calculator, the bar at the bottom has tools like a graphing calculator: <b>Graph</b>, <b>Analysis</b>, <b>Equations</b> and <b>Solver</b>. Use them to plot functions, find zeros, turning points and intersections, solve equations and systems of equations and rearrange formulas for any quantity. In the exam you only have the fx-991EX – the tools help you understand and check your results. (The tool screens are in German for now.)',
+    beispielKnopf: 'Plot an example',
+    abschnitte: [
+      {
+        titel: 'From the calculator to the graph: SHIFT OPTN',
+        text: 'Type an expression with <b>x</b> and press <b>SHIFT OPTN</b> – the expression is plotted in the graph. This also works in <b>Table</b> (f and g over the range of the table), in <b>Equation</b> (the polynomial or the two lines of a 2×2 system), in <b>Inequality</b> and in <b>Statistics</b> (data points with the regression curve). On the real calculator, SHIFT OPTN shows a QR code that opens the graph on a phone – here it is plotted straight away.',
+        tasten: '[x][x²]−2[x]−3[SHIFT][OPTN]',
+        vorbereitung: STANDARD,
+      },
+      {
+        titel: 'Graph',
+        text: 'Type functions such as <code>f(x) = x^2 - 2x - 3</code> or <code>g(x) = 2x + 1</code>. Zoom with two fingers (mouse wheel on a computer), pan with one finger. The graph marks zeros, maxima, minima, points of inflection and intersections. Tap a point: <b>x → Rechner</b> or <b>y → Rechner</b> stores the value in Ans; you can also add the tangent and the normal. Angles in degrees are set in the graph settings.',
+        beispiel: ['f(x) = x^2 - 2x - 3', 'g(x) = 2x + 1'],
+        tab: 'graph',
+        knopf: 'Open Graph',
+      },
+      {
+        titel: 'Analysis',
+        text: 'Derivatives f′, f″ and f‴ as formulas and their values at a point, tangent and normal, antiderivative, definite integral and area (also between two graphs) – plus, for electrical engineering, mean value, rectified value, RMS value, form factor and crest factor.',
+        tab: 'analysis',
+        knopf: 'Open Analysis',
+      },
+      {
+        titel: 'Equations',
+        text: 'Systems of linear equations with 2 to 8 unknowns (with the working), quadratic and cubic equations, polynomials up to degree 10 and any equation such as <code>2^x = 10</code> (solutions within an interval you choose). <b>Alle Werte in den Rechner</b> (all values to the calculator) stores the solutions in the variables A, B, C … of the calculator.',
+        tab: 'equations',
+        knopf: 'Open Equations',
+      },
+      {
+        titel: 'Solver',
+        text: 'Rearrange formulas such as <code>U = R*I</code> or <code>X_C = 1/(2*π*f*C)</code> for any quantity: enter the known values and tap <b>Lösen</b> (solve) next to the quantity you are looking for. Add your own formulas with <b>+</b>. Angles (e.g. cos φ) use the angle unit of the calculator (D or R at the top of the display).',
+        tab: 'solver',
+        knopf: 'Open Solver',
+      },
+      {
+        titel: 'Values to the calculator',
+        text: 'A value from the tools (button <b>→ Ans</b>) goes to the calculator as <b>Ans</b> – carry on calculating with, for example, <b>×2=</b>. A point from the graph goes to the variables <b>x</b> and <b>y</b>, several solutions at once to <b>A, B, C …</b>; recall them with ALPHA and the variable key.',
+      },
+      {
+        titel: 'Print / PDF',
+        text: 'Print the graph with its functions, key points, analysis, equations and solver values on an A4 sheet or save it as a PDF – optionally to scale (1 unit = 1 cm) on squared paper. On an iPhone: Print → Share → “Save to Files”.',
+        aktion: 'drucken',
+        knopf: 'Print / PDF',
+      },
+      {
+        titel: 'Start again',
+        text: 'Clears the graph and resets Analysis, Equations and the Solver values. Your own Solver formulas and the calculator stay as they are (reset the calculator with SHIFT 9).',
+        aktion: 'zuruecksetzen',
+        knopf: 'Reset tools',
+      },
+    ],
+  },
+
   ueber: `<h2>fx-991DE X Trainer</h2>
 <p>A practice calculator for the classroom, modelled on the <b>CASIO fx-991DE X</b> scientific calculator (ClassWiz): the same key layout, natural textbook input and exact results – so you can practise using your calculator on your phone or on the projector, too. In English, the trainer behaves like the international <b>fx-991EX</b>: decimal point, no recurring decimals.</p>
 <p>Included: Calculate, Complex, Base-N, Matrix, Vector, Statistics, Distribution, Table, Equation/Func, Inequality, Verify and Ratio. Not included: Spreadsheet.</p>
+<p>Plus the tools <b>Graph</b>, <b>Analysis</b>, <b>Equations</b>, <b>Solver</b> and <b>Print/PDF</b> from the web app <a href="https://temmchen.github.io/rpn42/">RPN42</a> – SHIFT OPTN plots straight from the calculator.</p>
 <p class="gedaempft">A learning project by <b>Tom Bleyer</b> (LTEtt, electrical engineering). Not a CASIO product. CASIO, ClassWiz and fx-991 are trademarks of CASIO Computer Co., Ltd. In some cases, results may differ from what the real calculator displays.</p>
 <p class="gedaempft">Source code (MIT License): <a href="https://github.com/temmchen/fx991">github.com/temmchen/fx991</a></p>`,
 };

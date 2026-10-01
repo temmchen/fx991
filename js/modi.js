@@ -15,6 +15,7 @@ import { eingabeFuer, variableAus } from './tasten.js';
 import { T } from './i18n.js';
 import { Menue, inSeiten, Werteingabe, Hinweis } from './bildschirme.js';
 import { TYPEN, TYP_FORMEL, STAT_NAMEN } from './statistik.js';
+import { funktionstext, polynomText, zahlText } from './zeichnen.js';
 
 const { Q, D, NULL, EINS } = Z;
 
@@ -141,6 +142,7 @@ class ErgebnisListe {
       if (v && e.wert) r.vars[v] = e.wert;
       return;
     }
+    if (k === 'S:optn' && r.haupt && r.haupt !== this && typeof r.haupt.zeichnen === 'function') { r.haupt.zeichnen(r); return; }
     if (k === 'sto') { this.stoWartet = true; return; }
     if (k === 'down' || (k === 'eq' && this.sicht === 1)) {
       if (this.i < this.eintraege.length - 1) { this.i++; return; }
@@ -225,7 +227,25 @@ export class EqnSchirm {
     return ['', '', 'ax²+bx+c=0', 'ax³+bx²+cx+d=0', 'ax⁴+bx³+cx²+dx+e=0'][this.n];
   }
 
+  /// SHIFT OPTN: Polynom bzw. die beiden Geraden eines 2×2-Systems zeichnen
+  zeichnen(r) {
+    const w = this.gitter ? this.gitter.werte : null;
+    if (!w) { r.zeichneOderQR([]); return; }
+    if (this.art === 'polynom') { r.zeichneOderQR([`p(x) = ${polynomText(w[0])}`], { grad: false }); return; }
+    if (this.n === 2) {
+      const texte = [];
+      w.forEach((z, i) => {
+        const [a, b, c] = z.map(Z.zahl);
+        if (b !== 0) texte.push(`g${i + 1}(x) = (${zahlText(c)} - (${zahlText(a)})*x)/(${zahlText(b)})`);
+      });
+      r.zeichneOderQR(texte, { grad: false });
+      return;
+    }
+    r.zeichneOderQR([]);
+  }
+
   taste(k, r) {
+    if (k === 'S:optn') { this.zeichnen(r); return; }
     if (!this.gitter) { if (k === 'menu' || k === 'S:menu') r.globaleTaste(k); else r.push(this.typMenue(r)); return; }
     if (this.gitter.taste(k)) return;
     switch (k) {
@@ -300,7 +320,13 @@ export class IneqSchirm {
     this.gitter = new Gitter(this.r, { werte: [Array(n + 1).fill(NULL)], kopf: 'abcde'.slice(0, n + 1).split(''), sicht: 1 });
   }
 
+  zeichnen(r) {
+    if (!this.gitter) { r.zeichneOderQR([]); return; }
+    r.zeichneOderQR([`p(x) = ${polynomText(this.gitter.werte[0])}`], { grad: false });
+  }
+
   taste(k, r) {
+    if (k === 'S:optn') { this.zeichnen(r); return; }
     if (!this.gitter) { if (k === 'menu' || k === 'S:menu') r.globaleTaste(k); else r.push(this.gradFrage(r)); return; }
     if (this.gitter.taste(k)) return;
     if (k === 'eq') { this.loese(r); return; }
@@ -537,8 +563,30 @@ export class TabelleSchirm {
     this.tabelle = null;
   }
 
+  /// SHIFT OPTN: f(x) und g(x) zeichnen (wie die QR-Funktion des ClassWiz in der Wertetabelle)
+  zeichnen(r) {
+    if (this.phase === 'f') r.tabelle.f = klon(this.e.wurzel);
+    else if (this.phase === 'g') r.tabelle.g = klon(this.e.wurzel);
+    const texte = [];
+    try {
+      if (r.tabelle.f && r.tabelle.f.length) texte.push(`f(x) = ${funktionstext(r.tabelle.f, r)}`);
+      if (r.einst.tabelle === 'fg' && r.tabelle.g && r.tabelle.g.length) texte.push(`g(x) = ${funktionstext(r.tabelle.g, r)}`);
+    } catch (e) {
+      r.zeigeFehler(e, () => {});
+      return;
+    }
+    // Tabelle schon berechnet: der Graph zeigt ihren x-Bereich (Start … Ende)
+    const optionen = {};
+    if (this.phase === 'tabelle') {
+      const a = Z.zahl(r.tabelle.start), b = Z.zahl(r.tabelle.ende);
+      if (Number.isFinite(a) && Number.isFinite(b) && b > a) optionen.bereich = [a, b];
+    }
+    r.zeichneOderQR(texte, optionen);
+  }
+
   taste(k, r) {
     if (k === 'menu' || k === 'S:menu') { r.globaleTaste(k); return; }
+    if (k === 'S:optn') { this.zeichnen(r); return; }
     if (this.phase === 'f' || this.phase === 'g') { this.funktionTaste(k, r); return; }
     if (this.phase === 'bereich') { this.bereichTaste(k, r); return; }
     this.tabellenTaste(k, r);
@@ -733,6 +781,7 @@ export class StatEditor {
   }
 
   taste(k, r) {
+    if (k === 'S:optn') { if (!r.zeichneStatistik()) r.zeichneOderQR([]); return; }
     if (this.gitter.taste(k)) return;
     switch (k) {
       case 'ac': r.pop(); return;

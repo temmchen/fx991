@@ -41,6 +41,30 @@ export default {
     weitere: "Remarque",
     tastenhilfeBanner: "Aide touches : appuie sur une touche → explication",
     tippsTitel: "Trucs & astuces",
+    tabRechner: "Calculatrice",
+    tabGraph: "Graphique",
+    tabAnalysis: "Analyse",
+    tabGleichungen: "Équations",
+    tabSolver: "Solveur",
+    tabHilfe: "Aide",
+    werkzeuge: "Outils",
+    griechisch: "αβγ",
+    griechischTitel: "Alphabet grec",
+    inAns: "Enregistré dans Ans",
+    inXY: "Enregistré dans x et y",
+    inVariablen: "Enregistré dans la calculatrice",
+    keinWert: "Valeur numérique non valable",
+    werkzeugeLaden: "Les outils sont en cours de chargement …",
+    werkzeugeFehlen: "Les outils (Graphique, Analyse …) n'ont pas pu être chargés. La calculatrice fonctionne toujours.",
+    neuLaden: "Recharger",
+    speichernNicht: "Enregistrement impossible (mémoire pleine ou bloquée)",
+    graphGrad: "Graphique : angles en degrés (comme la calculatrice)",
+    graphBogen: "Graphique : angles en radians (comme la calculatrice)",
+    zuruecksetzenTitel: "Réinitialiser les outils",
+    zuruecksetzenFrage: "Effacer le graphique et réinitialiser Analyse, Équations et les valeurs du Solveur ? La calculatrice reste inchangée.",
+    zuruecksetzenOk: "Réinitialiser",
+    zurueckgesetzt: "Outils réinitialisés",
+    neueVersion: "Nouvelle version chargée – active à la prochaine ouverture",
   },
 
   lektionen: [
@@ -499,9 +523,66 @@ export default {
     { titel: "Installer comme appli", text: "iPhone/iPad : dans Safari, Partager → « Sur l'écran d'accueil ». Android : menu → « Installer l'application ». Ensuite, le simulateur fonctionne aussi hors ligne." },
   ],
 
+  // MARK: Outils (Graphique, Analyse, Équations, Solveur de RPN42) – onglet d'aide « Outils »
+  werkzeuge: {
+    titel: "Graphique & outils",
+    intro: "En bas, à côté de la calculatrice, tu trouves des outils comme sur une calculatrice graphique : <b>Graphique</b>, <b>Analyse</b>, <b>Équations</b> et <b>Solveur</b>. Ils te permettent de tracer des fonctions, de trouver zéros, extrema et points d'intersection, de résoudre des équations et des systèmes et d'isoler n'importe quelle grandeur dans une formule. À l'examen, tu n'as que la fx-991DE X – les outils t'aident à comprendre et à contrôler tes résultats. (Les écrans des outils sont pour l'instant en allemand.)",
+    beispielKnopf: "Tracer un exemple",
+    abschnitte: [
+      {
+        titel: "De la calculatrice au graphique : SHIFT OPTN",
+        text: "Tape une expression avec <b>x</b> et appuie sur <b>SHIFT OPTN</b> – l'expression est tracée dans le graphique. Cela marche aussi dans <b>Tableau</b> (f et g sur l'intervalle du tableau), dans <b>Équations</b> (le polynôme ou les deux droites d'un système 2×2), dans <b>Inéquations</b> et dans <b>Statistiques</b> (points de mesure avec la courbe de régression). Sur la vraie calculatrice, SHIFT OPTN affiche un code QR qui ouvre le graphique sur le smartphone – ici, la courbe est tracée directement.",
+        tasten: '[x][x²]−2[x]−3[SHIFT][OPTN]',
+        vorbereitung: STANDARD,
+      },
+      {
+        titel: "Graphique",
+        text: "Tape des fonctions comme <code>f(x) = x^2 - 2x - 3</code> ou <code>g(x) = 2x + 1</code>. Zoome avec deux doigts (molette de la souris sur l'ordinateur), déplace avec un doigt. Le graphique montre les zéros, les maxima, les minima, les points d'inflexion et les points d'intersection. Touche un point : <b>x → Rechner</b> ou <b>y → Rechner</b> enregistre la valeur dans Ans ; tu peux aussi ajouter la tangente et la normale. Les angles en degrés se règlent dans les réglages du graphique.",
+        beispiel: ['f(x) = x^2 - 2x - 3', 'g(x) = 2x + 1'],
+        tab: 'graph',
+        knopf: "Ouvrir le graphique",
+      },
+      {
+        titel: "Analyse",
+        text: "Dérivées f′, f″ et f‴ comme formules et leurs valeurs en un point, tangente et normale, primitive, intégrale définie et aire (aussi entre deux courbes) – et, pour l'électrotechnique, valeur moyenne, valeur redressée, valeur efficace, facteur de forme et facteur de crête.",
+        tab: 'analysis',
+        knopf: "Ouvrir l'analyse",
+      },
+      {
+        titel: "Équations",
+        text: "Systèmes d'équations linéaires de 2 à 8 inconnues (avec la démarche), équations du deuxième et du troisième degré, polynômes jusqu'au degré 10 et équations quelconques comme <code>2^x = 10</code> (solutions dans un intervalle au choix). <b>Alle Werte in den Rechner</b> (toutes les valeurs vers la calculatrice) enregistre les solutions dans les variables A, B, C … de la calculatrice.",
+        tab: 'equations',
+        knopf: "Ouvrir les équations",
+      },
+      {
+        titel: "Solveur",
+        text: "Isoler n'importe quelle grandeur dans des formules comme <code>U = R*I</code> ou <code>X_C = 1/(2*π*f*C)</code> : saisis les valeurs connues et touche <b>Lösen</b> (résoudre) à côté de la grandeur cherchée. Ajoute tes propres formules avec <b>+</b>. Les angles (p. ex. cos φ) utilisent l'unité d'angle de la calculatrice (D ou R en haut de l'écran).",
+        tab: 'solver',
+        knopf: "Ouvrir le solveur",
+      },
+      {
+        titel: "Valeurs vers la calculatrice",
+        text: "Une valeur des outils (bouton <b>→ Ans</b>) arrive dans la calculatrice comme <b>Ans</b> – continue à calculer, par exemple avec <b>×2=</b>. Un point du graphique va dans les variables <b>x</b> et <b>y</b>, plusieurs solutions à la fois dans <b>A, B, C …</b> ; rappelle-les avec ALPHA et la touche de la variable.",
+      },
+      {
+        titel: "Impression / PDF",
+        text: "Imprime le graphique avec ses fonctions, ses points remarquables, l'analyse, les équations et les valeurs du solveur sur une feuille A4 ou enregistre-le en PDF – si tu veux à l'échelle (1 unité = 1 cm) sur papier quadrillé. Sur iPhone : Imprimer → Partager → « Enregistrer dans Fichiers ».",
+        aktion: 'drucken',
+        knopf: "Impression / PDF",
+      },
+      {
+        titel: "Recommencer",
+        text: "Efface le graphique et réinitialise Analyse, Équations et les valeurs du solveur. Tes propres formules du solveur et la calculatrice restent inchangées (la calculatrice se réinitialise avec SHIFT 9).",
+        aktion: 'zuruecksetzen',
+        knopf: "Réinitialiser les outils",
+      },
+    ],
+  },
+
   ueber: `<h2>fx-991DE X Trainer</h2>
 <p>Simulateur de calculatrice pour les cours, inspiré de la calculatrice scientifique <b>CASIO fx-991DE X</b> (ClassWiz) : mêmes touches aux mêmes places, saisie naturelle comme dans le manuel et résultats exacts – pour que tu puisses t'entraîner à utiliser ta calculatrice aussi sur ton smartphone ou au projecteur.</p>
 <p>Inclus : Calculs, Complexes, Base N, Matrices, Vecteurs, Statistiques, Distributions, Tableau, Équations, Inéquations, Vérification et Proportions. Non inclus : Tableur.</p>
+<p>En plus, les outils <b>Graphique</b>, <b>Analyse</b>, <b>Équations</b>, <b>Solveur</b> et <b>Impression/PDF</b> de l'application web <a href="https://temmchen.github.io/rpn42/">RPN42</a> – SHIFT OPTN trace directement depuis la calculatrice.</p>
 <p class="gedaempft">Un projet pédagogique de <b>Tom Bleyer</b> (LTEtt, électrotechnique). Ce n'est pas un produit CASIO. CASIO, ClassWiz et fx-991 sont des marques de CASIO Computer Co., Ltd. Dans certains cas, les résultats peuvent différer de l'affichage de la vraie calculatrice.</p>
 <p class="gedaempft">Code source (licence MIT) : <a href="https://github.com/temmchen/fx991">github.com/temmchen/fx991</a></p>`,
 };
