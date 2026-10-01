@@ -118,6 +118,7 @@ run('Speicher, Ans, Verlauf', () => {
   gleich(tippe(r, '[SHIFT][ENG]'), '1.234×10^3', 'ENG ←');
   gleich(tippe(r, '[SHIFT][ENG]'), '0.001234×10^6', 'ENG ← nochmals');
   gleich(tippe(r, '1014=[SHIFT][°′″]'), '2×3×13^2', 'Primfaktoren');
+  gleich(tippe(r, '3=[▫/▫]4='), '3/4', 'Bruchtaste nach Ergebnis: Ans wird Zähler');
 });
 
 run('CALC und SOLVE', () => {

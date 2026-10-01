@@ -329,7 +329,8 @@ export class RechenSchirm {
   }
 
   einfuegen(a) {
-    const fortsetzung = !!(a.op || a.post || a.Tpost);
+    // nach einem Ergebnis rechnen Operatoren, Potenzen und die Bruchtaste mit Ans weiter
+    const fortsetzung = !!(a.op || a.post || a.Tpost || a.T === 'frac');
     if (this.zustand === 'ergebnis') {
       const mitAns = fortsetzung && this.ergebnis && this.ergebnis.ansFaehig;
       this.neueEingabe();

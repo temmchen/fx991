@@ -5,7 +5,7 @@
 // Nachricht aus app.js) und lädt beim nächsten Anzeigen neu. Alte Zwischenspeicher werden gelöscht.
 // Auf temmchen.github.io teilen sich mehrere Apps den Ursprung: nur Zwischenspeicher mit „fx991-“ anfassen
 // und nur Anfragen innerhalb des eigenen Bereichs (scope) beantworten.
-const VERSION = '1.0.0';
+const VERSION = '1.0.1';
 const PREFIX = 'fx991-';
 const CACHE = PREFIX + VERSION;
 
