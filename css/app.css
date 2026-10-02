@@ -19,7 +19,7 @@
   --lila: #a77de0;
   --koerper: #1c1c1f;
   --lcd: #c5ccb3;
-  --lcd-text: #1a1e15;
+  --lcd-text: #0c0f08;
   /* Rechner-Reiter, hell: Fläche um das (immer dunkle) Gehäuse, Leiste */
   --casio-grund: #E6E5E1;
   --beamer-grund: #FFFFFF;
@@ -125,7 +125,9 @@ body.split #pane-hilfe .hilfe-kopf .schliessen { display: none; }
   background: linear-gradient(180deg, #b9c1a6, var(--lcd) 30%, #c9d0b8);
   box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
   color: var(--lcd-text); padding: 2px 6px 4px;
-  font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+  /* kräftige Schrift: auf dem Handy und am Beamer muss man jede Ziffer sofort ablesen können */
+  font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-weight: 700;
+  -webkit-font-smoothing: antialiased;
 }
 .lcd.aus { background: linear-gradient(180deg, #a9b098, #b4bba3); }
 .lcd.aus > * { display: none; }
@@ -154,11 +156,11 @@ body.split #pane-hilfe .hilfe-kopf .schliessen { display: none; }
   background: linear-gradient(#3b86f0, #1f5cc6 75%); color: #fff; font-size: 22px; font-weight: 600;
   box-shadow: 0 3px 0 #123a83, 0 5px 7px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.3);
 }
-.taste.rund .kappe {
-  /* SHIFT, ALPHA, MENU, ON: runde, matt silberne Tasten wie am Gerät – flach, ohne Glanzkugel */
-  border-radius: 50%; box-sizing: border-box; border: 1px solid #7d7f84;
-  background: linear-gradient(#f2f2f3, #c8c9cc);
-  box-shadow: 0 3px 0 #55575c, 0 4px 7px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.85);
+.taste.system .kappe {
+  /* SHIFT, ALPHA, MENU, ON: flache, matt silbergraue Rechtecktasten – gleiche Form wie die Funktionstasten */
+  border-radius: 7px 7px 9px 9px; box-sizing: border-box; border: 1px solid #8a8c91;
+  background: linear-gradient(#e4e5e8, #b9bbc0); color: #2a2b2e;
+  box-shadow: 0 3px 0 #4d4f54, 0 4px 6px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.7);
 }
 .taste.gedrueckt .kappe, .taste:active .kappe { transform: translateY(2px); filter: brightness(.88); box-shadow: 0 1px 0 #000, 0 2px 3px rgba(0,0,0,.5); }
 .taste.hervor .kappe { outline: 3px solid #ffcf3d; outline-offset: 2px; }
@@ -229,7 +231,7 @@ body.split #pane-hilfe .hilfe-kopf .schliessen { display: none; }
 .lcd .e10 { padding: 0 .04em; }
 .lcd .e10 .zehn { font-size: .62em; vertical-align: -.2em; }
 .lcd .x10 { padding-left: .06em; display: inline-flex; }
-.lcd .periode { text-decoration: overline; text-decoration-thickness: 1.5px; }
+.lcd .periode { text-decoration: overline; text-decoration-thickness: 2px; }
 .lcd .tsep { display: inline-block; width: .22em; }
 
 .lcd .cursor { display: inline-block; width: 2px; height: 1.05em; background: currentColor; margin: 0 -1px; animation: blinken 1s steps(1) infinite; align-self: center; }
@@ -239,19 +241,24 @@ body.split #pane-hilfe .hilfe-kopf .schliessen { display: none; }
 
 .lcd .bruch { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; font-size: .82em; margin: 0 .08em; }
 .lcd .bruch .zaehler, .lcd .bruch .nenner { display: flex; justify-content: center; padding: 0 .12em; }
-.lcd .bruch .strich { align-self: stretch; border-top: 1.5px solid currentColor; margin: .08em 0; }
+.lcd .bruch .strich { align-self: stretch; border-top: 2px solid currentColor; margin: .08em 0; }
 .lcd .bruch.d { font-size: .75em; }
 .lcd .gemischt { display: inline-flex; align-items: center; }
-.lcd .wurzel { display: inline-flex; align-items: flex-end; }
-.lcd .wurzel .haken { font-size: 1.05em; line-height: 1; margin-right: -.04em; transform: scaleY(1.15); transform-origin: bottom; }
-.lcd .wurzel .radikand { border-top: 1.5px solid currentColor; padding: .06em .06em 0 .04em; }
-.lcd .wurzel .index { font-size: .55em; align-self: flex-start; margin-right: -.3em; margin-top: .1em; }
+.lcd .wurzel { display: inline-flex; align-items: stretch; margin: 0 .04em; }
+/* gezeichneter Haken: so hoch wie der Radikand, oben nahtlos am Überstrich */
+.lcd .wurzel .haken {
+  flex: none; align-self: stretch; width: .6em; height: auto; overflow: visible; transform: translateY(1px);
+  fill: none; stroke: currentColor; stroke-width: 2px; stroke-linejoin: round; stroke-linecap: square;
+}
+.lcd .wurzel .haken path { vector-effect: non-scaling-stroke; }
+.lcd .wurzel .radikand { border-top: 2px solid currentColor; padding: .14em .1em 0 .1em; align-items: center; }
+.lcd .wurzel .index { font-size: .55em; align-self: flex-start; margin-right: -.62em; margin-top: .05em; min-width: .9em; padding-right: .5em; justify-content: flex-start; }
 .lcd .exponent { font-size: .66em; align-self: flex-start; margin-top: -.25em; padding-left: .02em; }
 .lcd .potenz { display: inline-flex; align-items: flex-start; }
 .lcd .potenz .exponent { margin-top: -.35em; }
 .lcd .logb { display: inline-flex; align-items: center; }
 .lcd .logb .basis { font-size: .62em; align-self: flex-end; margin-bottom: -.2em; }
-.lcd .betrag { display: inline-flex; border-left: 1.5px solid currentColor; border-right: 1.5px solid currentColor; padding: 0 .12em; margin: 0 .08em; }
+.lcd .betrag { display: inline-flex; border-left: 2px solid currentColor; border-right: 2px solid currentColor; padding: 0 .12em; margin: 0 .08em; }
 .lcd .integral, .lcd .summe, .lcd .ableitung { display: inline-flex; align-items: center; }
 .lcd .grenzen { display: inline-flex; flex-direction: column; align-items: center; margin-right: .06em; }
 .lcd .grenzen .zeichen { font-size: 1.3em; line-height: .9; font-family: "Times New Roman", Times, serif; }
@@ -330,7 +337,7 @@ body.split #pane-hilfe .hilfe-kopf .schliessen { display: none; }
 }
 .kappe-mini.zahl { background: linear-gradient(#fff, #e1e1e1); color: #1d1d1f; box-shadow: 0 2px 0 #9a9a9d; }
 .kappe-mini.blau { background: linear-gradient(#3b86f0, #1f5cc6); color: #fff; }
-.kappe-mini.rund { border-radius: 15px; background: linear-gradient(#f2f2f3, #c8c9cc); color: #222; box-shadow: 0 2px 0 #77797e; }
+.kappe-mini.system { border-radius: 5px; background: linear-gradient(#f2f2f3, #c8c9cc); color: #222; box-shadow: 0 2px 0 #77797e; }
 .kappe-mini.shiftaktiv { box-shadow: 0 0 0 2px var(--gelb); }
 .kappe-mini .s { color: var(--gelb); font-size: .8em; margin-left: 4px; }
 .kappe-mini .a { color: var(--rot); font-size: .8em; margin-left: 4px; }

@@ -11,10 +11,10 @@
 
 /// Beschriftung: haupt, shift (gelb), alpha (rot), basis (blau, Basis-N), komplex (lila, Komplex)
 export const TASTEN = {
-  shift: { haupt: 'SHIFT', art: 'rund' },
-  alpha: { haupt: 'ALPHA', art: 'rund' },
-  menu: { haupt: 'MENU', shift: 'SETUP', art: 'rund' },
-  on: { haupt: 'ON', art: 'rund' },
+  shift: { haupt: 'SHIFT', art: 'system' },
+  alpha: { haupt: 'ALPHA', art: 'system' },
+  menu: { haupt: 'MENU', shift: 'SETUP', art: 'system' },
+  on: { haupt: 'ON', art: 'system' },
   up: { haupt: '▲', art: 'pfeil' },
   down: { haupt: '▼', art: 'pfeil' },
   left: { haupt: '◀', art: 'pfeil' },

@@ -70,11 +70,11 @@ const BESCHRIFTUNG = {
 
 function lage() {
   const L = {};
-  const rund = 46;
-  L.shift = { x: 6, y: 0, w: rund, h: rund, art: 'rund' };
-  L.alpha = { x: 62, y: 0, w: rund, h: rund, art: 'rund' };
-  L.menu = { x: 244, y: 0, w: rund, h: rund, art: 'rund' };
-  L.on = { x: 300, y: 0, w: rund, h: rund, art: 'rund' };
+  // SHIFT, ALPHA, MENU, ON: flache Rechtecktasten in den Spalten der Funktionstasten darunter
+  L.shift = { x: 0, y: 12, w: 52, h: 30, art: 'system' };
+  L.alpha = { x: 60, y: 12, w: 52, h: 30, art: 'system' };
+  L.menu = { x: 240, y: 12, w: 52, h: 30, art: 'system' };
+  L.on = { x: 300, y: 12, w: 52, h: 30, art: 'system' };
   // Steuerkreuz (Fläche 117…235 × 0…90)
   L.up = { x: 150, y: 0, w: 52, h: 30, art: 'pfeil' };
   L.down = { x: 150, y: 60, w: 52, h: 30, art: 'pfeil' };
@@ -138,7 +138,7 @@ export function baueGeraet(container, tasteGedrueckt) {
       const besch = h('div', { class: 'beschr' });
       // Beschriftung so breit wie die Taste (+2 px): zwischen den Beschriftungen benachbarter Tasten bleibt
       // eine Lücke (sonst lesen sich z. B. „HEX“ und „10■“ als ein Wort); 4 px Luft über der Taste
-      const breite = l.art === 'rund' ? 80 : l.w + 2;
+      const breite = l.art === 'system' ? 80 : l.w + 2;
       const versatz = 16;
       besch.style.cssText = `left:${l.x + l.w / 2 - breite / 2}px;top:${l.y - versatz}px;width:${breite}px;justify-content:${b.oben.length === 1 ? 'center' : 'space-between'}`;
       besch.innerHTML = b.oben.map((s, i) => (b.oben.length === 3 && i === 1 ? `<span class="mitte">${s}</span>` : `<span>${s}</span>`)).join('');

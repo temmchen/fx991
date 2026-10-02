@@ -23,6 +23,22 @@ export function h(tag, attr, ...kinder) {
   return e;
 }
 
+/// Wurzelhaken als Linienzug statt Schriftzeichen: wächst mit der Höhe des Radikanden mit und
+/// endet oben genau auf dessen Überstrich (das Zeichen „√“ sitzt je nach Schrift schief und dünn)
+const SVG_NS = 'http://www.w3.org/2000/svg';
+function wurzelHaken() {
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('class', 'haken');
+  svg.setAttribute('viewBox', '0 0 12 24');
+  svg.setAttribute('preserveAspectRatio', 'none');
+  svg.setAttribute('aria-hidden', 'true');
+  const p = document.createElementNS(SVG_NS, 'path');
+  // kleiner Anstrich – Abstrich nach unten – langer Aufstrich bis zur oberen rechten Ecke
+  p.setAttribute('d', 'M0.6 14.5 L3.4 12.6 L6.6 23.2 L12 0');
+  svg.append(p);
+  return svg;
+}
+
 const FN_NAMEN = {
   asin: 'sin⁻¹', acos: 'cos⁻¹', atan: 'tan⁻¹', asinh: 'sinh⁻¹', acosh: 'cosh⁻¹', atanh: 'tanh⁻¹',
   RanInt: 'RanInt#', Identity: 'Identity', P: 'P', Q: 'Q', R: 'R',
@@ -129,9 +145,9 @@ class Satz {
       case 'frac': return h('span', { class: 'bruch' }, f(0, 'zaehler'), h('span', { class: 'strich' }), f(1, 'nenner'));
       case 'mixedOut': return h('span', { class: 'bruch klein-gemischt' }, f(0, 'zaehler'), h('span', { class: 'strich' }), f(1, 'nenner'));
       case 'mixed': return h('span', { class: 'gemischt' }, f(0), h('span', { class: 'bruch' }, f(1, 'zaehler'), h('span', { class: 'strich' }), f(2, 'nenner')));
-      case 'sqrt': return h('span', { class: 'wurzel' }, h('span', { class: 'haken' }, '√'), f(0, 'radikand'));
-      case 'cbrt': return h('span', { class: 'wurzel' }, h('span', { class: 'index' }, '3'), h('span', { class: 'haken' }, '√'), f(0, 'radikand'));
-      case 'root': return h('span', { class: 'wurzel' }, f(0, 'index'), h('span', { class: 'haken' }, '√'), f(1, 'radikand'));
+      case 'sqrt': return h('span', { class: 'wurzel' }, wurzelHaken(), f(0, 'radikand'));
+      case 'cbrt': return h('span', { class: 'wurzel mit-index' }, h('span', { class: 'index' }, '3'), wurzelHaken(), f(0, 'radikand'));
+      case 'root': return h('span', { class: 'wurzel mit-index' }, f(0, 'index'), wurzelHaken(), f(1, 'radikand'));
       case 'pow': return f(0, 'exponent');
       case 'pow10': return h('span', { class: 'potenz' }, h('span', { class: 'z' }, '10'), f(0, 'exponent'));
       case 'epow': return h('span', { class: 'potenz' }, h('span', { class: 'konst kursiv' }, 'e'), f(0, 'exponent'));

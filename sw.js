@@ -6,7 +6,7 @@
 // gelöscht. Die App lädt alle Module beim Start, eine laufende ältere Seite holt danach nichts mehr nach.
 // Auf temmchen.github.io teilen sich mehrere Apps den Ursprung: nur Zwischenspeicher mit „fx991-“ anfassen
 // und nur Anfragen innerhalb des eigenen Bereichs (scope) beantworten.
-const VERSION = '1.2.1';
+const VERSION = '1.2.2';
 const PREFIX = 'fx991-';
 const CACHE = PREFIX + VERSION;
 
