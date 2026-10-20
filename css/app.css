@@ -109,11 +109,6 @@ body.split #pane-hilfe .hilfe-kopf .schliessen { display: none; }
 }
 .geraet .modell { position: absolute; left: 30px; top: 44px; color: #e6e6e6; font: 500 18px/1 "Helvetica Neue", Arial, sans-serif; letter-spacing: .02em; }
 .geraet .linie { position: absolute; left: 12px; top: 72px; color: var(--rot); font: 600 21px/1 "Avenir Next Condensed", "Arial Narrow", sans-serif; letter-spacing: .32em; }
-.geraet .solar {
-  position: absolute; right: 0; top: 0; width: 156px; height: 56px; border-radius: 6px;
-  background: linear-gradient(160deg, #3b2b24, #20140f 55%, #2c1d17); box-shadow: inset 0 0 0 2px #121212, inset 0 3px 6px rgba(0,0,0,.6);
-}
-.geraet .solar::after { content: ''; position: absolute; inset: 4px; background: repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 38px); }
 
 .lcd-rahmen {
   position: absolute; left: 22px; right: 22px; top: 124px; height: 176px; border-radius: 14px;

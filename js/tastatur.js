@@ -114,8 +114,7 @@ export function baueGeraet(container, tasteGedrueckt) {
   const kopf = h('div', { class: 'kopf' },
     h('div', { class: 'name' }, 'Tom Bleyer'),
     h('div', { class: 'modell' }, 'fx-991DE X'),
-    h('div', { class: 'linie' }, 'TRAINER'),
-    h('div', { class: 'solar', 'aria-hidden': 'true' }));
+    h('div', { class: 'linie' }, 'TRAINER'));
   const lcd = h('div', { class: 'lcd', 'aria-live': 'polite' });
   const rahmen = h('div', { class: 'lcd-rahmen' }, lcd);
   const tasten = h('div', { class: 'tasten' });
